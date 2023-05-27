@@ -12,7 +12,7 @@ class mainGui extends JFrame {
     public JPanel panel2;
     public JPanel panel3;
 
-    // buttons
+    // buttons=
     public JButton startButton;
     public JButton exitButton;
 
@@ -27,7 +27,6 @@ class mainGui extends JFrame {
     mainGui() {
         setTitle("Mini Game");
 
-
         // panel1: Game contents
         panel1 = new JPanel();
         panel1.setBackground(panelBackgroundColor);
@@ -38,9 +37,6 @@ class mainGui extends JFrame {
         gg2 = new GuiGame2();
         gg1.panel.setVisible(false);
         gg2.panel.setVisible(false);
-
-
-
 
         // panel2: Game list
         panel2 = new JPanel();
@@ -55,6 +51,7 @@ class mainGui extends JFrame {
                 // Game 1 실행하는 코드 작성
                 // Game.Java와의 연결을 구현해야 합니다.
                 gameChoice = 1;
+                showGameInstructions(1); // 게임 1 사용법 보여주기
             }
         });
         
@@ -65,6 +62,7 @@ class mainGui extends JFrame {
                 // Game 2 실행하는 코드 작성
                 // Game.Java와의 연결을 구현해야 합니다.
                 gameChoice = 2;
+                showGameInstructions(2); // 게임 2 사용법 보여주기
             }
         });
         
@@ -75,9 +73,9 @@ class mainGui extends JFrame {
                 // Game 3 실행하는 코드 작성
                 // Game.Java와의 연결을 구현해야 합니다.
                 gameChoice = 3;
+                showGameInstructions(3); // 게임 3 사용법 보여주기
             }
         });
-
 
         // panel 3: buttons
         panel3 = new JPanel();
@@ -95,13 +93,10 @@ class mainGui extends JFrame {
         exitButton.setActionCommand("Exit");
         exitButton.addActionListener(new ButtonClickListener());
         
-
-
         setLayout(null);
 
         panel1.add(gg1.panel);
         panel1.add(gg2.panel);
-
 
         panel2.add(game1Button);
         panel2.add(game2Button);
@@ -122,7 +117,27 @@ class mainGui extends JFrame {
         setVisible(true);
     }
 
-
+    // Method to show game instructions in Panel 1
+    private void showGameInstructions(int game) {
+        String instructions = "";
+        switch (game) {
+            case 1:
+                instructions = "Game 1은 ~~~~ 입니다."; // 게임 1 사용법
+                break;
+            case 2:
+                instructions = "Game 2는 ~~~~ 입니다."; // 게임 2 사용법
+                break;
+            case 3:
+                instructions = "Game 3은 ~~~~ 입니다."; // 게임 3 사용법
+                break;
+        }
+        JLabel instructionsLabel = new JLabel(instructions);
+        instructionsLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        panel1.removeAll();
+        panel1.add(instructionsLabel, BorderLayout.CENTER);
+        panel1.revalidate();
+        panel1.repaint();
+    }
 
     private class ButtonClickListener implements ActionListener {
 
@@ -159,6 +174,6 @@ class mainGui extends JFrame {
             }
 
 
-		}
+        }
     }
 }
