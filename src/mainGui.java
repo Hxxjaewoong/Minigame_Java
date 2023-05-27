@@ -33,6 +33,7 @@ class mainGui extends JFrame {
         panel1.setBounds(20, 20, 460, 520);
         panel1.setLayout(new BorderLayout());
         
+        
         gg1 = new GuiGame1();
         gg2 = new GuiGame2();
         gg1.panel.setVisible(false);
@@ -108,6 +109,21 @@ class mainGui extends JFrame {
         add(panel1);
         add(panel2);
         add(panel3);
+        
+        /* 처음에는 JLabel 기능을 사용했다가, Text 분량 제한으로 textArea로 바꿨습니다. 필요하면 사용하세요.
+        // Welcome label
+        JLabel welcomeLabel = new JLabel("Welcome to MiniGame");
+        welcomeLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        welcomeLabel.setForeground(Color.WHITE); // 폰트 색상을 흰색(White)으로 설정
+        panel1.add(welcomeLabel, BorderLayout.CENTER); // "Welcome!" 문구를 추가
+        */
+        // Welcome text area
+        JTextArea welcomeTextArea = new JTextArea("Welcome!\nIf you click each game name in the list \nyou can read discription of that game.");
+        welcomeTextArea.setEditable(false);
+        welcomeTextArea.setLineWrap(true);
+        welcomeTextArea.setWrapStyleWord(true);
+        welcomeTextArea.setFont(welcomeTextArea.getFont().deriveFont(20f)); // 원하는 폰트 크기로 설정
+        panel1.add(welcomeTextArea, BorderLayout.CENTER); // "Welcome!" 텍스트 영역을 추가
         
         pack();
 
