@@ -21,6 +21,10 @@ class mainGui extends JFrame {
     public GuiGame1 gg1;
     public GuiGame2 gg2;
     
+    //
+    public JTextArea welcomeTextArea;
+    public JLabel instructionsLabel;
+
     // color
     public Color panelBackgroundColor = new Color(102, 102, 102);
 
@@ -36,8 +40,6 @@ class mainGui extends JFrame {
         
         gg1 = new GuiGame1();
         gg2 = new GuiGame2();
-        gg1.panel.setVisible(false);
-        gg2.panel.setVisible(false);
 
         // panel2: Game list
         panel2 = new JPanel();
@@ -94,10 +96,9 @@ class mainGui extends JFrame {
         exitButton.setActionCommand("Exit");
         exitButton.addActionListener(new ButtonClickListener());
         
+
         setLayout(null);
 
-        panel1.add(gg1.panel);
-        panel1.add(gg2.panel);
 
         panel2.add(game1Button);
         panel2.add(game2Button);
@@ -110,6 +111,32 @@ class mainGui extends JFrame {
         add(panel2);
         add(panel3);
         
+        showWelcomeMessage();
+
+        // init instruction label
+        instructionsLabel = new JLabel();
+        instructionsLabel.setHorizontalAlignment(SwingConstants.CENTER);
+
+
+        // frame design
+        pack();
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(720, 600);
+        setResizable(false);
+        setVisible(true);
+
+    }
+
+
+    private void clearPanel1() {
+        panel1.removeAll();
+        panel1.revalidate();
+        panel1.repaint();
+    }
+
+
+
+    private void showWelcomeMessage() {
         /* 처음에는 JLabel 기능을 사용했다가, Text 분량 제한으로 textArea로 바꿨습니다. 필요하면 사용하세요.
         // Welcome label
         JLabel welcomeLabel = new JLabel("Welcome to MiniGame");
@@ -118,23 +145,19 @@ class mainGui extends JFrame {
         panel1.add(welcomeLabel, BorderLayout.CENTER); // "Welcome!" 문구를 추가
         */
         // Welcome text area
-        JTextArea welcomeTextArea = new JTextArea("Welcome!\nIf you click each game name in the list \nyou can read discription of that game.");
+        welcomeTextArea = new JTextArea("Welcome!\nIf you click each game name in the list \nyou can read discription of that game.");
         welcomeTextArea.setEditable(false);
         welcomeTextArea.setLineWrap(true);
         welcomeTextArea.setWrapStyleWord(true);
         welcomeTextArea.setFont(welcomeTextArea.getFont().deriveFont(20f)); // 원하는 폰트 크기로 설정
         panel1.add(welcomeTextArea, BorderLayout.CENTER); // "Welcome!" 텍스트 영역을 추가
         
-        pack();
-
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(720, 600);
-        setResizable(false);
-        setVisible(true);
     }
+
 
     // Method to show game instructions in Panel 1
     private void showGameInstructions(int game) {
+       
         String instructions = "";
         switch (game) {
             case 1:
@@ -146,14 +169,17 @@ class mainGui extends JFrame {
             case 3:
                 instructions = "Game 3은 ~~~~ 입니다."; // 게임 3 사용법
                 break;
+            default:
+                // 게임을 선택하지 않고 시작을 눌렀을 경우
+                instructions = "게임을 선택해 주세요.";
         }
-        JLabel instructionsLabel = new JLabel(instructions);
-        instructionsLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        panel1.removeAll();
+        instructionsLabel.setText(instructions);
+        
+        clearPanel1();
         panel1.add(instructionsLabel, BorderLayout.CENTER);
-        panel1.revalidate();
-        panel1.repaint();
+
     }
+
 
     private class ButtonClickListener implements ActionListener {
 
@@ -162,34 +188,30 @@ class mainGui extends JFrame {
 
             String command = e.getActionCommand();
 
-            // Game 시작 버튼을 눌렀을 때 처리할 내용 작성
-            // panel1과 연결된 Game.Java 실행 등의 코드를 작성해야 합니다.
+            // 선택한 게임이 있다면 게임 시작
             if (command.equals("Start Game")) {
-                gg1.panel.setVisible(false);
-                gg2.panel.setVisible(false);
-
+                clearPanel1();
                 switch (gameChoice) {
                     case 1:
-                        System.out.println(1);
-                        gg1.panel.setVisible(true);
+                        panel1.add(gg1.panel);
                         break;
                     case 2:
-                        System.out.println(2);
-                        gg2.panel.setVisible(true);
+                        panel1.add(gg2.panel);
                         break;
                     case 3:
-                        System.out.println(3);
                         break;
-                
+                    default:
+                        showGameInstructions(gameChoice);
+                        break;
                 }
             }
 
+
+            // 프로그램 종료
             else if (command.equals("Exit")) {
                 System.out.println("Exit");
-                System.exit(0); // 종료 버튼을 눌렀을 때 프로그램 종료
+                System.exit(0);
             }
-
-
         }
     }
 }
