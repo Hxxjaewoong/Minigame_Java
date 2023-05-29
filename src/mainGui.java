@@ -5,6 +5,9 @@ import javax.swing.*;
 
 import gui.GuiGame1;
 import gui.GuiGame2;
+import gui.GuiGame3;
+// import gui.GuiGame4;
+// import gui.GuiGame5;
 
 class mainGui extends JFrame {
     // panels
@@ -20,6 +23,9 @@ class mainGui extends JFrame {
     public int gameChoice = 0;
     public GuiGame1 gg1;
     public GuiGame2 gg2;
+    public GuiGame3 gg3;
+    // public GuiGame4 gg4;
+    // public GuiGame5 gg5;
     
     //
     public JTextArea welcomeTextArea;
@@ -40,6 +46,9 @@ class mainGui extends JFrame {
         
         gg1 = new GuiGame1();
         gg2 = new GuiGame2();
+        gg3 = new GuiGame3();
+        // gg4 = new GuiGame4();
+        // gg5 = new GuiGame5();
 
         // panel2: Game list
         panel2 = new JPanel();
@@ -79,6 +88,7 @@ class mainGui extends JFrame {
                 showGameInstructions(3); // 게임 3 사용법 보여주기
             }
         });
+
 
         // panel 3: buttons
         panel3 = new JPanel();
@@ -199,8 +209,10 @@ class mainGui extends JFrame {
                         panel1.add(gg2.panel);
                         break;
                     case 3:
+                        panel1.add(gg3.panel);
                         break;
                     default:
+                        // 게임 미 선택
                         showGameInstructions(gameChoice);
                         break;
                 }
