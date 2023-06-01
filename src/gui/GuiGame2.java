@@ -8,8 +8,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import games.Game2;
+import socket.Client;
 
 public class GuiGame2 extends Game2 implements GamePanel {
+
+	Client client;
 
 	public JPanel panel;
 	public JPanel panelInfo;
@@ -17,8 +20,8 @@ public class GuiGame2 extends Game2 implements GamePanel {
     public JButton buttons[][] = new JButton[SIZE][SIZE];
 	public JTextArea infoText;
 	
-	public GuiGame2() {
-		playing = true;
+	public GuiGame2(Client client) {
+		this.client = client;
 
 		panel = new JPanel();
 		panel.setBounds(gameArea);
@@ -82,7 +85,6 @@ public class GuiGame2 extends Game2 implements GamePanel {
 					buttons[r][c].setBackground(Color.black);
 				}
 
-				playing = !isFinished();
 			} else {
 				; // do nothing (or 벌칙)
 			}			

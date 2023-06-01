@@ -18,8 +18,6 @@ import java.util.ArrayList;
 
 public class Game2 {
 	public static final int SIZE = 5;
-
-	public boolean playing;
 	
 	List<Integer> baseNumbers = new ArrayList<>(); // for initailizating game
 
