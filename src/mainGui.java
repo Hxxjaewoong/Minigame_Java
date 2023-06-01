@@ -36,7 +36,7 @@ class mainGui extends JFrame {
 
     mainGui() {
         setTitle("Mini Game");
-
+        
         // panel1: Game contents
         panel1 = new JPanel();
         panel1.setBackground(panelBackgroundColor);
