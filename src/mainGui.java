@@ -6,7 +6,7 @@ import javax.swing.*;
 import gui.GuiGame1;
 import gui.GuiGame2;
 import gui.GuiGame3;
-// import gui.GuiGame4;
+import gui.GuiGame4;
 // import gui.GuiGame5;
 
 class mainGui extends JFrame {
@@ -24,7 +24,7 @@ class mainGui extends JFrame {
     public GuiGame1 gg1;
     public GuiGame2 gg2;
     public GuiGame3 gg3;
-    // public GuiGame4 gg4;
+    public GuiGame4 gg4;
     // public GuiGame5 gg5;
     
     //
@@ -47,14 +47,14 @@ class mainGui extends JFrame {
         gg1 = new GuiGame1();
         gg2 = new GuiGame2();
         gg3 = new GuiGame3();
-        // gg4 = new GuiGame4();
+        gg4 = new GuiGame4();
         // gg5 = new GuiGame5();
 
         // panel2: Game list
         panel2 = new JPanel();
         panel2.setBackground(panelBackgroundColor);
         panel2.setBounds(500, 20, 180, 450);
-        panel2.setLayout(new GridLayout(3, 1)); // 3개의 게임 목록을 세로로 배치하기 위해 GridLayout 설정
+        panel2.setLayout(new GridLayout(5, 1)); // 3개의 게임 목록을 세로로 배치하기 위해 GridLayout 설정
         
         // game 1
         JButton game1Button = new JButton("Game 1");
@@ -88,7 +88,17 @@ class mainGui extends JFrame {
                 showGameInstructions(3); // 게임 3 사용법 보여주기
             }
         });
-
+        
+     	// game 4
+        JButton game4Button = new JButton("Game 4");
+        game4Button.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                // Game 4 실행하는 코드 작성
+                // Game.Java와의 연결을 구현해야 합니다.
+                gameChoice = 4;
+                showGameInstructions(4); // 게임 4 사용법 보여주기
+            }
+        });
 
         // panel 3: buttons
         panel3 = new JPanel();
@@ -113,6 +123,7 @@ class mainGui extends JFrame {
         panel2.add(game1Button);
         panel2.add(game2Button);
         panel2.add(game3Button);
+        panel2.add(game4Button);
         
         panel3.add(startButton);
         panel3.add(exitButton);
@@ -179,6 +190,9 @@ class mainGui extends JFrame {
             case 3:
                 instructions = "Game 3은 ~~~~ 입니다."; // 게임 3 사용법
                 break;
+            case 4:
+                instructions = "Game 4은 ~~~~ 입니다."; // 게임 4 사용법
+                break;
             default:
                 // 게임을 선택하지 않고 시작을 눌렀을 경우
                 instructions = "게임을 선택해 주세요.";
@@ -210,6 +224,9 @@ class mainGui extends JFrame {
                         break;
                     case 3:
                         panel1.add(gg3.panel);
+                        break;
+                    case 4:
+                        panel1.add(gg4.panel);
                         break;
                     default:
                         // 게임 미 선택
