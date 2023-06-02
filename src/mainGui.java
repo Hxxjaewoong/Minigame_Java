@@ -3,6 +3,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
 
+import com.sun.tools.javac.Main;
+
 import gui.GuiGame1;
 import gui.GuiGame2;
 import gui.GuiGame3;
@@ -38,10 +40,28 @@ class mainGui extends JFrame {
         setTitle("Mini Game");
         
         // panel1: Game contents
+        
         panel1 = new JPanel();
+
         panel1.setBackground(panelBackgroundColor);
         panel1.setBounds(20, 20, 460, 520);
         panel1.setLayout(new BorderLayout());
+        
+        JLabel imageLabel;
+        
+        ImageIcon imageIcon = new ImageIcon("C:/Users/bread/eclipse-workspace/MINIGAME2/src/MINIGAME_MAIN.jpg");
+        Image image = imageIcon.getImage().getScaledInstance(460, 520, Image.SCALE_SMOOTH);
+        imageIcon = new ImageIcon(image);
+        imageLabel = new JLabel(imageIcon);
+
+        panel1.add(imageLabel, BorderLayout.CENTER);
+
+        setLayout(null);
+        add(panel1);
+
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(520, 600);
+        setResizable(false);
         
         
         gg1 = new GuiGame1();
@@ -54,10 +74,18 @@ class mainGui extends JFrame {
         panel2 = new JPanel();
         panel2.setBackground(panelBackgroundColor);
         panel2.setBounds(500, 20, 180, 450);
-        panel2.setLayout(new GridLayout(5, 1)); // 3개의 게임 목록을 세로로 배치하기 위해 GridLayout 설정
+        panel2.setLayout(new GridLayout(4, 1)); // 4개의 게임 목록을 세로로 배치하기 위해 GridLayout 설정
         
-        // game 1
-        JButton game1Button = new JButton("Game 1");
+        // game 1 
+        //이미지 아이콘 설정
+        ImageIcon game1Image = new ImageIcon("C:\\Users\\bread\\eclipse-workspace\\MINIGAME2\\src\\TREASUREHUNT.jpg");
+        //이미지 크기 변경하는 법   
+        //Image Img1 = game1Image.getImage();
+        //Image changeImg1 = Img1.getScaledInstance(200, 180, Image.SCALE_SMOOTH);
+        //ImageIcon changeIcon1 = new ImageIcon(changeImg1);
+        
+        JButton game1Button = new JButton(game1Image);
+        
         game1Button.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 // Game 1 실행하는 코드 작성
@@ -68,7 +96,10 @@ class mainGui extends JFrame {
         });
         
         // game 2
-        JButton game2Button = new JButton("Game 2");
+        //이미지 아이콘 설정
+        ImageIcon game2Image = new ImageIcon("C:\\Users\\bread\\eclipse-workspace\\MINIGAME2\\src\\NUMBERGAME.jpg");
+        JButton game2Button = new JButton(game2Image);
+        
         game2Button.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 // Game 2 실행하는 코드 작성
@@ -79,7 +110,10 @@ class mainGui extends JFrame {
         });
         
         // game 3
-        JButton game3Button = new JButton("Game 3");
+        //이미지 아이콘 설정
+        ImageIcon game3Image = new ImageIcon("C:\\Users\\bread\\eclipse-workspace\\MINIGAME2\\src\\HALLIGALLI.jpg");
+        JButton game3Button = new JButton(game3Image);
+        
         game3Button.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 // Game 3 실행하는 코드 작성
@@ -90,7 +124,9 @@ class mainGui extends JFrame {
         });
         
      	// game 4
-        JButton game4Button = new JButton("Game 4");
+        //이미지 아이콘 설정
+        ImageIcon game4Image = new ImageIcon("C:\\Users\\bread\\eclipse-workspace\\MINIGAME2\\src\\DIRECTIONGAME.jpg");
+        JButton game4Button = new JButton(game4Image);
         game4Button.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 // Game 4 실행하는 코드 작성
@@ -132,7 +168,7 @@ class mainGui extends JFrame {
         add(panel2);
         add(panel3);
         
-        showWelcomeMessage();
+        //showWelcomeMessage();
 
         // init instruction label
         instructionsLabel = new JLabel();
@@ -157,7 +193,7 @@ class mainGui extends JFrame {
 
 
 
-    private void showWelcomeMessage() {
+    //private void showWelcomeMessage() {
         /* 처음에는 JLabel 기능을 사용했다가, Text 분량 제한으로 textArea로 바꿨습니다. 필요하면 사용하세요.
         // Welcome label
         JLabel welcomeLabel = new JLabel("Welcome to MiniGame");
@@ -166,14 +202,16 @@ class mainGui extends JFrame {
         panel1.add(welcomeLabel, BorderLayout.CENTER); // "Welcome!" 문구를 추가
         */
         // Welcome text area
+    	/*
         welcomeTextArea = new JTextArea("Welcome!\nIf you click each game name in the list \nyou can read discription of that game.");
         welcomeTextArea.setEditable(false);
         welcomeTextArea.setLineWrap(true);
         welcomeTextArea.setWrapStyleWord(true);
         welcomeTextArea.setFont(welcomeTextArea.getFont().deriveFont(20f)); // 원하는 폰트 크기로 설정
         panel1.add(welcomeTextArea, BorderLayout.CENTER); // "Welcome!" 텍스트 영역을 추가
+        */
         
-    }
+    //}
 
 
     // Method to show game instructions in Panel 1
