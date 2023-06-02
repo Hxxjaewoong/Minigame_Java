@@ -15,9 +15,11 @@ import games.Game3;
 public class GameManager extends Thread {
     Random rd = new Random();
 
-    public Game1 game1;
-    public Game2 game2;
-    public Game3 game3;
+    // static으로 선언해야 멀티쓰레드에서도 같은 게임을 다루게 됨
+    // 두 유저가 같은 조건일 필요 없으면 굳이 아니어도 됨
+    public static Game1 game1;
+    public static Game2 game2;
+    public static Game3 game3;
 
     private int userNumber;
     private Socket socket;
