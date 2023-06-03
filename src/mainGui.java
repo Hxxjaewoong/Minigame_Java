@@ -1,7 +1,6 @@
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Random;
 
 import javax.swing.*;
 
@@ -9,6 +8,8 @@ import socket.Client;
 import gui.GuiGame1;
 import gui.GuiGame2;
 import gui.GuiGame3;
+import gui.GuiGame4;
+import gui.GuiGame5;
 
 
 class mainGui extends JFrame {
@@ -27,6 +28,8 @@ class mainGui extends JFrame {
     public GuiGame1 gg1;
     public GuiGame2 gg2;
     public GuiGame3 gg3;
+    public GuiGame4 gg4;
+    public GuiGame5 gg5;
 
     
     //
@@ -35,6 +38,15 @@ class mainGui extends JFrame {
 
     // color
     public Color panelBackgroundColor = new Color(102, 102, 102);
+
+
+    // image icons
+    ImageIcon mainInitialImage = new ImageIcon("image/MINIGAME_MAIN.jpg");
+    ImageIcon game1Image = new ImageIcon("image/TREASUREHUNT.jpg");
+    ImageIcon game2Image = new ImageIcon("image/NUMBERGAME.jpg");
+    ImageIcon game3Image = new ImageIcon("image/HALLIGALLI.jpg");
+    ImageIcon game4Image = new ImageIcon("image/DIRECTIONGAME.jpg");
+    ImageIcon game5Image = new ImageIcon("image/DIRECTIONGAME.jpg");
 
     mainGui(Client client) {
         this.client = client;
@@ -47,41 +59,49 @@ class mainGui extends JFrame {
         panel1.setBounds(20, 20, 460, 520);
         panel1.setLayout(new BorderLayout());
 
+
+        JLabel imageLabel;
+        
+
+        Image image = mainInitialImage.getImage().getScaledInstance(460, 520, Image.SCALE_SMOOTH);
+        mainInitialImage = new ImageIcon(image);
+        imageLabel = new JLabel(mainInitialImage);
+
+        panel1.add(imageLabel, BorderLayout.CENTER);
+
         gg1 = new GuiGame1(client);
         gg2 = new GuiGame2(client);
         gg3 = new GuiGame3(client);
+        gg4 = new GuiGame4(client);
+        gg5 = new GuiGame5(client);
 
 
         // panel2: 게임 선택 버튼
         panel2 = new JPanel();
         panel2.setBackground(panelBackgroundColor);
         panel2.setBounds(500, 20, 180, 450);
-        panel2.setLayout(new GridLayout(3, 1)); // 3개의 게임 목록을 세로로 배치하기 위해 GridLayout 설정
-        
-        JButton game1Button = new JButton("Game 1");
-        JButton game2Button = new JButton("Game 2");
-        JButton game3Button = new JButton("Game 3");
+        panel2.setLayout(new GridLayout(5, 1)); // 5개의 게임 목록을 세로로 배치하기 위해 GridLayout 설정
 
-        // game 선택 버튼 이벤트
-        game1Button.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                gameChoice = 1;
-                showGameInstructions(1); // 게임 1 사용법 보여주기
-            }
-        });
-        game2Button.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                gameChoice = 2;
-                showGameInstructions(2); // 게임 2 사용법 보여주기
-            }
-        });
-        game3Button.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                gameChoice = 3;
-                showGameInstructions(3); // 게임 3 사용법 보여주기
-            }
-        });
         
+        JButton game1Button = new JButton(game1Image);
+        JButton game2Button = new JButton(game2Image);
+        JButton game3Button = new JButton(game3Image);
+        JButton game4Button = new JButton(game4Image);
+        JButton game5Button = new JButton(game5Image);
+
+        game1Button.setActionCommand("1");
+        game2Button.setActionCommand("2");
+        game3Button.setActionCommand("3");
+        game4Button.setActionCommand("4");
+        game5Button.setActionCommand("5");
+        
+        game1Button.addActionListener(new ButtonClickListener());
+        game2Button.addActionListener(new ButtonClickListener());
+        game3Button.addActionListener(new ButtonClickListener());
+        game4Button.addActionListener(new ButtonClickListener());
+        game5Button.addActionListener(new ButtonClickListener());
+
+
         
 
 
@@ -109,6 +129,8 @@ class mainGui extends JFrame {
         panel2.add(game1Button);
         panel2.add(game2Button);
         panel2.add(game3Button);
+        panel2.add(game4Button);
+        panel2.add(game5Button);
         
         panel3.add(startButton);
         panel3.add(exitButton);
@@ -117,8 +139,6 @@ class mainGui extends JFrame {
         add(panel2);
         add(panel3);
 
-        // 게임 입장 시 welcome message 보여주기
-        showWelcomeMessage();
 
         // instruction label 초기화
         instructionsLabel = new JLabel();
@@ -150,23 +170,7 @@ class mainGui extends JFrame {
 
 
 
-    private void showWelcomeMessage() {
-        /* 처음에는 JLabel 기능을 사용했다가, Text 분량 제한으로 textArea로 바꿨습니다. 필요하면 사용하세요.
-        // Welcome label
-        JLabel welcomeLabel = new JLabel("Welcome to MiniGame");
-        welcomeLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        welcomeLabel.setForeground(Color.WHITE); // 폰트 색상을 흰색(White)으로 설정
-        panel1.add(welcomeLabel, BorderLayout.CENTER); // "Welcome!" 문구를 추가
-        */
-        // Welcome text area
-        welcomeTextArea = new JTextArea("Welcome!\nIf you click each game name in the list \nyou can read discription of that game.");
-        welcomeTextArea.setEditable(false);
-        welcomeTextArea.setLineWrap(true);
-        welcomeTextArea.setWrapStyleWord(true);
-        welcomeTextArea.setFont(welcomeTextArea.getFont().deriveFont(20f)); // 원하는 폰트 크기로 설정
-        panel1.add(welcomeTextArea, BorderLayout.CENTER); // "Welcome!" 텍스트 영역을 추가
-        
-    }
+
 
 
     // panel1에 설명을 보여주는 메소드
@@ -183,6 +187,12 @@ class mainGui extends JFrame {
             case 3:
                 instructions = "Game 3은 ~~~~ 입니다."; // 게임 3 사용법
                 break;
+            case 4:
+                instructions = "Game 4은 ~~~~ 입니다."; // 게임 4 사용법
+                break;
+            case 5:
+                instructions = "Game 5은 ~~~~ 입니다."; // 게임 5 사용법
+                break;
             default:
                 // 게임을 선택하지 않고 시작을 눌렀을 경우
                 instructions = "게임을 선택해 주세요.";
@@ -191,10 +201,10 @@ class mainGui extends JFrame {
         
         clearPanel1();
         panel1.add(instructionsLabel, BorderLayout.CENTER);
-
     }
 
 
+    // 게임 시작 버튼에 대한 액션 리스너
     private class ButtonClickListener implements ActionListener {
 
         @Override
@@ -208,15 +218,23 @@ class mainGui extends JFrame {
                 switch (gameChoice) {
                     case 1:
                         panel1.add(gg1.panel);
-                        client.sendMessage("choose 1");
+                        client.sendMessage("start 1");
                         break;
                     case 2:
                         panel1.add(gg2.panel);
-                        client.sendMessage("choose 2");
+                        client.sendMessage("start 2");
                         break;
                     case 3:
                         panel1.add(gg3.panel);
-                        client.sendMessage("choose 3");
+                        client.sendMessage("start 3");
+                        break;
+                    case 4:
+                        panel1.add(gg4.panel);
+                        client.sendMessage("start 4");
+                        break;
+                    case 5:
+                        panel1.add(gg5.panel);
+                        client.sendMessage("start 5");
                         break;
                     default:
                         showGameInstructions(gameChoice);
@@ -229,6 +247,14 @@ class mainGui extends JFrame {
             else if (command.equals("Exit")) {
                 System.out.println("Exit");
                 System.exit(0);
+            }
+            
+
+            // 게임 선택 (1~5)
+            else {
+                int numberChosenGame = Integer.parseInt(command); // 선택한 게임의 순번
+                gameChoice = numberChosenGame;
+                showGameInstructions(numberChosenGame);
             }
         }
     }
@@ -244,7 +270,6 @@ class mainGui extends JFrame {
     private int currentGame = 0;
 
 	private class getMessageThread extends Thread {
-        Random rd = new Random();
 
         @Override
         public void run() {
@@ -278,6 +303,10 @@ class mainGui extends JFrame {
                         break;
                     case 3:
                         break;
+                    case 4:
+                        break;
+                    case 5:
+                        break;
                 }
 
                 return;
@@ -300,7 +329,10 @@ class mainGui extends JFrame {
                         break;
                     case 3:
                         break;
-
+                    case 4:
+                        break;
+                    case 5:
+                        break;
                 }
     		}
 

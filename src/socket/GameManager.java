@@ -95,14 +95,14 @@ public class GameManager extends Thread {
 
         String[] parsed = message.split(" ");
 
-        // "choose gameNumber"
-        // 게임 선택
-        if (parsed[0].equals("choose")) {
+        // "start gameNumber"
+        // 게임 시작버튼 누름
+        if (parsed[0].equals("start")) {
             int gameNumber = Integer.parseInt(parsed[1]);
             if (userNumber == 0) choice0 = gameNumber;
             else                 choice1 = gameNumber;
             
-            // 선택한 게임이 같으면 게임 시작
+            // 시작버튼 누른 게임이 같으면 게임 시작
             if (choice0 == choice1) {
                 playing = choice0;
                 switch (playing) {
@@ -176,7 +176,7 @@ public class GameManager extends Thread {
                 if (game1.isFinished()) {
                     return "winner " + game1.score0 + " " + game1.score1;
                 }
-                return "target " + r + " " + c;
+                return "target " + r + " " + c + " " + game1.foundCount;
             }
             return "empty " + r + " " + c + " " + result;
         }
