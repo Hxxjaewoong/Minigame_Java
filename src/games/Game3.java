@@ -36,6 +36,7 @@ public class Game3 {
 
 	
 	public Game3() {
+
 		myTurn = true;
 		myCardsCount = TOTAL_CARDS / 2;
 		myStackCount = 0;

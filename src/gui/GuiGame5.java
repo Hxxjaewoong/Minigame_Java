@@ -7,10 +7,10 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import games.Game2;
+import games.Game5;
 import socket.Client;
 
-public class GuiGame2 extends Game2 implements GamePanel {
+public class GuiGame5 extends Game5 implements GamePanel {
 
 	Client client;
 
@@ -20,7 +20,7 @@ public class GuiGame2 extends Game2 implements GamePanel {
     public JButton buttons[][] = new JButton[SIZE][SIZE];
 	public JTextArea infoText;
 	
-	public GuiGame2(Client client) {
+	public GuiGame5(Client client) {
 		this.client = client;
 
 		panel = new JPanel();
@@ -30,7 +30,7 @@ public class GuiGame2 extends Game2 implements GamePanel {
 		panelInfo.setPreferredSize(gameInfoArea);
 		panelInfo.setBackground(Color.yellow);
 
-		infoText = new JTextArea("Contains info of game2");
+		infoText = new JTextArea("Contains info of Game5");
 		panelInfo.add(infoText);
 
         panelPlay = new JPanel();
@@ -64,35 +64,6 @@ public class GuiGame2 extends Game2 implements GamePanel {
 	}
 	
 	
-
-
-	
-		
-		// 결과 메시지를 파싱해서 결과 처리
-		public void parseReceivedMessage(String message) {
-			String[] parsedMessage = message.split(" ");
-			System.out.println(message);
-	
-	
-			if (parsedMessage[0].equals("start")) {
-
-			}
-	
-
-
-	
-		}
-	
-
-
-
-
-
-
-
-
-
-
 	
 	
     private class ButtonClickListener implements ActionListener {

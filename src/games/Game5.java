@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.ArrayList;
 
 
-public class Game2 {
+public class Game5 {
 	public static final int SIZE = 5;
 	
 	List<Integer> baseNumbers = new ArrayList<>(); // for initailizating game
@@ -27,7 +27,7 @@ public class Game2 {
 	public static boolean[][] opened2 = new boolean[SIZE][SIZE];;
 	public static int targetNumber;
 	
-	public Game2() {
+	public Game5() {
 		// add base numbers to list
         for (int i = 1; i <= SIZE*SIZE; i++) baseNumbers.add(i);
 
