@@ -29,17 +29,12 @@ public class Game1 {
 	public boolean[] targetFounded = new boolean[TARGET_COUNT];  // target을 찾았는지
 	public int foundCount;
 	
-	public Game1() {
+	// map에 무작위로 5개의 target을 표시하고 그 위치를 기록함. targetFounded는 false로 초기화
+	public void initGame() {
 		score0 = 0;
 		score1 = 0;
-		
-		initTarget();
-		
 		foundCount = 0;
-	}
-	
-	// map에 무작위로 5개의 target을 표시하고 그 위치를 기록함. targetFounded는 false로 초기화
-	public void initTarget() {
+
 		// fill map and opened with false
 		for (boolean[] row :    map) Arrays.fill(row, false);
 		for (boolean[] row : opened) Arrays.fill(row, false);

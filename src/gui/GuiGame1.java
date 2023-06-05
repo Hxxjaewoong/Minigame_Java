@@ -45,14 +45,15 @@ public class GuiGame1 extends Game1 implements GamePanel {
         
 		for (int r = 0; r < MAP_SIZE; r++) {
         	for (int c = 0; c < MAP_SIZE; c++) {
-        		JButton button = new JButton("???");
+        		JButton button = new JButton();
         		
         		// 버튼 디자인 및 위치
         		button.setBackground(Color.pink);
         		button.setBorder(BorderFactory.createLineBorder(Color.red, 2));
+				button.setFont(game1ButtonFont);
         
                 // 버튼 클릭 이벤트
-                button.setActionCommand(r+","+c);
+                button.setActionCommand(r+" "+c);
                 button.addActionListener(new ButtonClickListener());
         		
         		buttons[r][c] = button;
@@ -64,8 +65,6 @@ public class GuiGame1 extends Game1 implements GamePanel {
 
 		panel.add(panelInfo);
 		panel.add(panelPlay);
-
-
 	}
 	
 
@@ -83,11 +82,11 @@ public class GuiGame1 extends Game1 implements GamePanel {
 	// 결과 메시지를 파싱해서 결과 처리
 	public void parseReceivedMessage(String message) {
 		String[] parsedMessage = message.split(" ");
-		System.out.println("<<< " + message);
 
+		// "start [gameNumber] [firstUserNumber]"
 		// 게임 시작
 		if (parsedMessage[0].equals("start")) {
-			initTarget();
+			initGame();
 			initButtons();
 
 			int firstUserNumber = Integer.parseInt(parsedMessage[2]);
@@ -188,7 +187,7 @@ public class GuiGame1 extends Game1 implements GamePanel {
 			}
 
 			// 클릭한 버튼의 좌표 획득
-			String rc[] = e.getActionCommand().split(",");
+			String rc[] = e.getActionCommand().split(" ");
 			int r = Integer.parseInt(rc[0]);
 			int c = Integer.parseInt(rc[1]);
 			
