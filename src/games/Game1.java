@@ -16,8 +16,8 @@ import java.util.Random;
 
 
 public class Game1 {
-	public final int MAP_SIZE = 10;
-	public final int TARGET_COUNT = 5;
+	public final static int MAP_SIZE = 10;
+	public final static int TARGET_COUNT = 5;
 
 	public int score0;
 	public int score1;

@@ -215,23 +215,23 @@ class mainGui extends JFrame {
                 switch (gameChoice) {
                     case 1:
                         panel1.add(gg1.panel);
-                        client.sendMessage("start 1");
+                        client.sendMessage("start " + client.userNumber + " 1");
                         break;
                     case 2:
                         panel1.add(gg2.panel);
-                        client.sendMessage("start 2");
+                        client.sendMessage("start " + client.userNumber + " 2");
                         break;
                     case 3:
                         panel1.add(gg3.panel);
-                        client.sendMessage("start 3");
+                        client.sendMessage("start " + client.userNumber + " 3");
                         break;
                     case 4:
                         panel1.add(gg4.panel);
-                        client.sendMessage("start 4");
+                        client.sendMessage("start " + client.userNumber + " 4");
                         break;
                     case 5:
                         panel1.add(gg5.panel);
-                        client.sendMessage("start 5");
+                        client.sendMessage("start " + client.userNumber + " 5");
                         break;
                     default:
                         showGameInstructions(gameChoice);
@@ -287,34 +287,9 @@ class mainGui extends JFrame {
         public void parseReceivedMessage(String message) {
             String[] parsedMessage = message.split(" ");
 
-
-            // 게임이 진행중이면 (메인화면이 아니면) 각 게임의 gui class에서 메시지 처리
-            if (currentGame != 0) {
-                switch (currentGame) {
-                    case 1:
-                        gg1.parseReceivedMessage(message);
-                        break;
-                    case 2:
-                        gg2.parseReceivedMessage(message);
-                        break;
-                    case 3:
-                        gg3.parseReceivedMessage(message);
-                        break;
-                    case 4:
-                        // gg4.parseReceivedMessage(message);
-                        break;
-                    case 5:
-                        // gg5.parseReceivedMessage(message);
-                        break;
-                }
-
-                return;
-            }
-
-
             // "start [gameNumber] ([initString])"
             // 세번째 인자는 여기서는 무시해도 됨
-            // 해당 게임 시작. 각 parser에서 start를 만나면 game 초기화
+            // 해당 게임 시작
             if (parsedMessage[0].equals("start")) {
                 int gameNumber = Integer.parseInt(parsedMessage[1]);
                 currentGame = gameNumber;
@@ -336,16 +311,40 @@ class mainGui extends JFrame {
                         // gg5.parseReceivedMessage(message);
                         break;
                 }
-    		}
 
+                return;
+    		}
 
             // "end"
             // 현재 게임 종료
             if (parsedMessage[0].equals("end")) {
                 currentGame = 0;
                 clearPanel1();
+                return;
             }
+
+
+            switch (currentGame) {
+                case 1:
+                    gg1.parseReceivedMessage(message);
+                    break;
+                case 2:
+                    gg2.parseReceivedMessage(message);
+                    break;
+                case 3:
+                    gg3.parseReceivedMessage(message);
+                    break;
+                case 4:
+                    // gg4.parseReceivedMessage(message);
+                    break;
+                case 5:
+                    // gg5.parseReceivedMessage(message);
+                    break;
+                default:
+                    ;
+            }
+
+            return;
         }
     }
-
 }

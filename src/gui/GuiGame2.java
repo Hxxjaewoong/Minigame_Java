@@ -19,7 +19,7 @@ public class GuiGame2 extends Game2 implements GamePanel {
 	public JPanel panel;
 	public JPanel panelInfo;
     public JPanel panelPlay;
-    public JButton buttons[][] = new JButton[SIZE][SIZE];
+    public static JButton buttons[][] = new JButton[SIZE][SIZE];
 	public JTextArea infoText;
 	
 	public GuiGame2(Client client) {
@@ -103,6 +103,7 @@ public class GuiGame2 extends Game2 implements GamePanel {
 		if (parsedMessage[0].equals("finish")) {
 			if (user == client.userNumber) {
 				buttons[r][c].setText("");
+				buttons[r][c].setBackground(Color.black);
 				infoText.setText("win!");
 			} else {
 				infoText.setText("lose...");

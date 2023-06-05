@@ -50,7 +50,7 @@ public class GuiGame3 extends Game3 implements GamePanel {
 		panelInfo.setPreferredSize(gameInfoArea);
 		panelInfo.setBackground(Color.yellow);
 
-		infoText = new JTextArea("Contains info of game3");
+		infoText = new JTextArea("상대방 대기 중...");
 		panelInfo.add(infoText);
 
         panelPlay = new JPanel();

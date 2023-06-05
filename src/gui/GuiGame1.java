@@ -20,7 +20,7 @@ public class GuiGame1 extends Game1 implements GamePanel {
 	public JPanel panel;
 	public JPanel panelInfo;
     public JPanel panelPlay;
-    public JButton buttons[][] = new JButton[MAP_SIZE][MAP_SIZE];
+    public static JButton buttons[][] = new JButton[MAP_SIZE][MAP_SIZE];
 	public JTextArea infoText;
 	
 	public GuiGame1(Client client) {
