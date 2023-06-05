@@ -10,24 +10,22 @@ package games;
  */
 
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.ArrayList;
 
 
 public class Game2 {
-	public static final int SIZE = 5;
+	public final static int SIZE = 2;
 	
 	List<Integer> baseNumbers = new ArrayList<>(); // for initailizating game
 
-	public static int[][] layer1 = new int[SIZE][SIZE];;
-	public static int[][] layer2 = new int[SIZE][SIZE];;
-	public static boolean[][] opened1 = new boolean[SIZE][SIZE];;
-	public static boolean[][] opened2 = new boolean[SIZE][SIZE];;
-	public static int targetNumber;
+	public static int[][] layer1 = new int[SIZE][SIZE];
+	public static int[][] layer2 = new int[SIZE][SIZE];
+	public static int[] targetNumber = new int[2];
 	
-	public Game2() {
+
+	public void initGame() {
 		// add base numbers to list
         for (int i = 1; i <= SIZE*SIZE; i++) baseNumbers.add(i);
 
@@ -47,26 +45,17 @@ public class Game2 {
 			}
 		}
 		
-		// init opened
-		for (boolean[] row : opened1) Arrays.fill(row, false);
-		for (boolean[] row : opened2) Arrays.fill(row, false);
-		
-		targetNumber = 1;
+		targetNumber[0] = 1;
+		targetNumber[1] = 1;
 	}
 	
 	
 	// 현재 클릭해야할 숫자인지 확인
 	// true면 targetNumber 증가
 	// false면 do nothing (or 벌칙?)
-	public boolean isTargetNumber(int row, int col) {
-		if (opened1[row][col] == false && layer1[row][col] == targetNumber) {
-			opened1[row][col] = true;
-			targetNumber++;
-			return true;
-		}
-		if (opened2[row][col] == false && layer2[row][col] == targetNumber) {
-			opened2[row][col] = true;
-			targetNumber++;
+	public boolean isTargetNumber(int row, int col, int user) {
+		if (layer1[row][col] == targetNumber[user] || layer2[row][col] == targetNumber[user]) {
+			targetNumber[user]++;
 			return true;
 		}
 
@@ -75,8 +64,8 @@ public class Game2 {
 	
 
 	// targetNumber가 전체 숫자 크기보다 크면 종료
-	public boolean isFinished() {
-		return targetNumber > SIZE*SIZE*2;
+	public boolean isFinished(int user) {
+		return targetNumber[user] > SIZE*SIZE*2;
 	}
 }
 

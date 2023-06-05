@@ -21,7 +21,7 @@ public class GameManager extends Thread {
     // 두 유저가 같은 조건일 필요 없으면 굳이 아니어도 됨
     // 서버가 주체가 되지 않아도 되는 게임은 여기서 필요 없음 (e.g. 먼저 끝나면 이기는 게임)
     public static Game1 game1;
-    public static Game2 game2; // 필요 없음
+    public static Game2 game2;
     public static Game3 game3;
     public static Game4 game4;
     public static Game5 game5;
@@ -101,6 +101,7 @@ public class GameManager extends Thread {
     public String handleReceivedMessage(String message) {
 
         String[] parsed = message.split(" ");
+        System.out.println("<<< " + message);
 
         // "start [gameNumber]"
         // 게임 시작버튼 누름
@@ -117,22 +118,27 @@ public class GameManager extends Thread {
 
                 switch (playing) {
                     case 1:
-                        game1.initTarget();
+                        game1.initGame();
                         // first player
                         initString = String.valueOf(rd.nextInt(2));
                         break;
+
                     case 2:
-                        for (int r = 0; r < game2.SIZE; r++) {
-                            for (int c = 0; c < game2.SIZE; c++) {
-                                initString = initString + " " + String.valueOf(game2.layer1[r][c]);
+                        game2.initGame();
+                        // game 2의 배치 전달
+                        for (int r = 0; r < Game2.SIZE; r++) {
+                            for (int c = 0; c < Game2.SIZE; c++) {
+                                initString = initString + String.valueOf(Game2.layer1[r][c]) + " ";
                             }
                         }
-                        
                         break;
+
                     case 3:
                         break;
+
                     case 4:
                         break;
+
                     case 5:
                         break;
                 }
@@ -153,30 +159,20 @@ public class GameManager extends Thread {
         switch (playing) {
             case 1:
                 return handleGame1(message);
+            case 2:
+                return handleGame2(message);
+            // case 3:
+            //     return handleGame3(message);
+            // case 4:
+            //     return handleGame4(message);
+            // case 5:
+            //     return handleGame5(message);
             default:
                 return null;
         }
     }
 
 
-
-
-
-
-    // 선택한 게임에 따라 게임 상태 초기화 (필요시 작성)
-    public void gameInit() {
-        System.out.println("game " + playing + " 시작");
-        switch (playing) {
-            case 0:
-                // main 화면
-                break;
-            case 1:
-                game1.initTarget();
-            // case 2:
-            //     game2 = new Game2();
-            //     // + send the initial info of game2
-        }
-    }
 
     
     // game1의 행동 처리
@@ -220,13 +216,18 @@ public class GameManager extends Thread {
             int c = Integer.parseInt(parsed[3]);
 
 			if (game2.isTargetNumber(r, c, user)) {
-                int nextTarget = game2.targetNumber[user];
+                int nextTarget = Game2.targetNumber[user];
+                int nextLayer = Game2.layer2[r][c];
+                System.out.println(user + " next target is " + nextTarget);
+
                 if (game2.isFinished(user)) {
-                    return "finish " + user;
+                    return "finish " + user + " " + r + " " + c;
                 }
-                return "target " + user + " " + nextTarget;
+                return "target " + user + " " + r + " " + c + " " + nextTarget + " " + nextLayer;
+
+            } else {
+                return "notTarget " + user + " " + r + " " + c;
             }
-            else return "notTarget " + user;
         }
 
         return null;

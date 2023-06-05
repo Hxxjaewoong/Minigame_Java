@@ -276,7 +276,6 @@ class mainGui extends JFrame {
 
 				// 결과 메시지 처리
                 if (receivedMessage != null) {
-					System.out.println("client >>> mainGui: " + receivedMessage);
                     parseReceivedMessage(receivedMessage);
                 }
             }
@@ -296,7 +295,7 @@ class mainGui extends JFrame {
                         gg1.parseReceivedMessage(message);
                         break;
                     case 2:
-                        // gg2.parseReceivedMessage(message);
+                        gg2.parseReceivedMessage(message);
                         break;
                     case 3:
                         break;
@@ -310,7 +309,7 @@ class mainGui extends JFrame {
             }
 
 
-            // "start [gameNumber] (+[firstPlayer])"
+            // "start [gameNumber] ([initString])"
             // 세번째 인자는 여기서는 무시해도 됨
             // 해당 게임 시작. 각 parser에서 start를 만나면 game 초기화
             if (parsedMessage[0].equals("start")) {
@@ -322,7 +321,7 @@ class mainGui extends JFrame {
                         gg1.parseReceivedMessage(message);
                         break;
                     case 2:
-                        // gg2.parseReceivedMessage(message);
+                        gg2.parseReceivedMessage(message);
                         break;
                     case 3:
                         break;

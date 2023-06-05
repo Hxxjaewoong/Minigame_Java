@@ -10,4 +10,6 @@ public interface GamePanel {
     Dimension gamePlayArea = new Dimension(460, 460);
 
     Font infoFont = new Font("Sanserif", Font.BOLD, 15);
+    Font game1ButtonFont = new Font("Sanserif", Font.BOLD, 10);
+    Font game2ButtonFont = new Font("Sanserif", Font.BOLD, 30);
 }
