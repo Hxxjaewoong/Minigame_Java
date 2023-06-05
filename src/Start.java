@@ -10,7 +10,11 @@ public class Start extends JPanel {
     private static boolean ser = false;
 	private JRadioButton r1;
 	private JRadioButton r2;
-	final JTextField text;
+
+	private JPanel ipPanel; //ip주소라고 붙이기 위한 panel
+	private JLabel ipLabel;
+	final JTextField ipInputField; // ip 주소 입력하는 창
+
 	private static String ip = null;
 	
 	public Start() {
@@ -19,12 +23,13 @@ public class Start extends JPanel {
 		// 게임 시작 버튼
 		JButton startButton = new JButton("Start Game");
 		
-		// ip 주소 입력하는 창
-		text = new JTextField(20);
-		JLabel ipad = new JLabel("ip주소");
-		JPanel ipadpan = new JPanel();//ip주소라고 붙이기 위한 panel
-		ipadpan.add(ipad);
-		ipadpan.add(text);
+		
+		ipPanel = new JPanel();
+		ipLabel = new JLabel("ip주소");
+		ipInputField = new JTextField(20);
+		ipInputField.setText("localhost");
+		ipPanel.add(ipLabel);
+		ipPanel.add(ipInputField);
 		
 		
 		r1 = new JRadioButton("1P (방장)");
@@ -37,7 +42,7 @@ public class Start extends JPanel {
 		bgPan.add(r2);
 		
 		add(bgPan,BorderLayout.NORTH);
-		add(ipadpan,BorderLayout.CENTER);
+		add(ipPanel,BorderLayout.CENTER);
 		add(startButton,BorderLayout.SOUTH);
 		
 		StartButtonListener listener = new StartButtonListener();
@@ -52,15 +57,13 @@ public class Start extends JPanel {
 		return ser;
 	}
 	
-
-
-	
+	// start 버튼 누르면 선택한 플레이어에 따라 조건 설정 및 아이피 기록
 	private class StartButtonListener implements ActionListener
 	{
 		public void actionPerformed(ActionEvent event)
 		{
 			start = true;
-			ip = text.getText(); // 입력한 IP 주소 가져오기
+			ip = ipInputField.getText(); // 입력한 IP 주소 가져오기
 			if (r1.isSelected()) {
 				ser = true;
 			}
@@ -69,6 +72,5 @@ public class Start extends JPanel {
 			}
 		}
 	}
-
 
 }

@@ -1,6 +1,7 @@
 package gui;
 
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Rectangle;
 
 public interface GamePanel {
@@ -8,4 +9,5 @@ public interface GamePanel {
     Dimension gameInfoArea = new Dimension(460, 50);
     Dimension gamePlayArea = new Dimension(460, 460);
 
+    Font infoFont = new Font("Sanserif", Font.BOLD, 15);
 }

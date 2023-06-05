@@ -46,6 +46,8 @@ public class Gamerunner extends Thread{
 		client = new Client(start.getIp());
 		Thread c = new Thread(client);
 		c.start();
+
+		frame.dispose();
 		mainGui maingui = new mainGui(client);
 	}
 }
