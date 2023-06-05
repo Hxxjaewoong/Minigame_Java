@@ -239,12 +239,12 @@ public class GameManager extends Thread {
 
     // game3의 행동 처리
     public String handleGame3(String message) {
-        String[] parsed = message.split(" ");
+        String[] parsedMessage = message.split(" ");
 
         // "open [user]"
         // user가 카드 open
-        if (parsed[0].equals("open")) {
-            int user = Integer.parseInt(parsed[1]);
+        if (parsedMessage[0].equals("open")) {
+            int user = Integer.parseInt(parsedMessage[1]);
 
             game3.openCard(user);
             int loser = game3.isFinished();
@@ -263,8 +263,8 @@ public class GameManager extends Thread {
 
         // "bell [user]"
         // user가 종 누름
-        if (parsed[0].equals("bell")) {
-            int user = Integer.parseInt(parsed[1]);
+        if (parsedMessage[0].equals("bell")) {
+            int user = Integer.parseInt(parsedMessage[1]);
 
             boolean isSuccess = game3.isSum5(user);
 

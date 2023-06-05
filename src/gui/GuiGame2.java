@@ -81,12 +81,12 @@ public class GuiGame2 extends Game2 implements GamePanel {
 		
 	// 결과 메시지를 파싱해서 결과 처리
 	public void parseReceivedMessage(String message) {
-		String[] parsed = message.split(" ");
+		String[] parsedMessage = message.split(" ");
 
 		// "start [gameNumber] [numbers 1 ~ 25]"
 		// 게임 시작. 서버에게서 받은 숫자로 타일 초기화
-		if (parsed[0].equals("start")) {
-			initButtons(parsed);
+		if (parsedMessage[0].equals("start")) {
+			initButtons(parsedMessage);
 			infoText.setText("Game start! Target: 1");
 
 			playing = true;
@@ -94,13 +94,13 @@ public class GuiGame2 extends Game2 implements GamePanel {
 
 
 
-		int user = Integer.parseInt(parsed[1]);
-		int r = Integer.parseInt(parsed[2]);
-		int c = Integer.parseInt(parsed[3]);
+		int user = Integer.parseInt(parsedMessage[1]);
+		int r = Integer.parseInt(parsedMessage[2]);
+		int c = Integer.parseInt(parsedMessage[3]);
 
 		// "finish [user] [r] [c]"
 		// [user]가 먼저 끝남
-		if (parsed[0].equals("finish")) {
+		if (parsedMessage[0].equals("finish")) {
 			if (user == client.userNumber) {
 				buttons[r][c].setText("");
 				infoText.setText("win!");
@@ -114,11 +114,11 @@ public class GuiGame2 extends Game2 implements GamePanel {
 
 		// "target [user] [r] [c] [nextTarget] [nextLayer]"
 		// 타깃 클릭함.
-		if (parsed[0].equals("target")) {
-			if (Integer.parseInt(parsed[1]) != client.userNumber) return;
+		if (parsedMessage[0].equals("target")) {
+			if (Integer.parseInt(parsedMessage[1]) != client.userNumber) return;
 
-			int nextTarget = Integer.parseInt(parsed[4]);
-			int nextLayer = Integer.parseInt(parsed[5]);
+			int nextTarget = Integer.parseInt(parsedMessage[4]);
+			int nextLayer = Integer.parseInt(parsedMessage[5]);
 
 			if (nextTarget-1 > SIZE*SIZE) {
 				buttons[r][c].setText("");
@@ -135,7 +135,7 @@ public class GuiGame2 extends Game2 implements GamePanel {
 
 		// "notTarget [user] [r] [c]"
 		// do nothing
-		if (parsed[0].equals("notTarget")) {
+		if (parsedMessage[0].equals("notTarget")) {
 			return;
 		}
 

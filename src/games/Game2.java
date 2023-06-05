@@ -16,7 +16,7 @@ import java.util.ArrayList;
 
 
 public class Game2 {
-	public final static int SIZE = 2;
+	public final static int SIZE = 5;
 	
 	List<Integer> baseNumbers = new ArrayList<>(); // for initailizating game
 
