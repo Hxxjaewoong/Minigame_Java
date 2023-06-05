@@ -15,77 +15,76 @@ import java.util.Random;
 
 
 public class Game3 {
-	private static final int TOTAL_CARDS = 56;
+	Random rd = new Random();
+
+	public static final int TOTAL_CARDS = 56;
 	public static final int FRUITS = 4;
 	public static final String[] FRUITS_NAME = { "banana", "lime", "plum", "strawberry" };
 	public static final int[] NUMBERS = { 1,1,1,2,2,2,3,3,3,4,4,4,5,5 }; // 과일 개수 별 확률 조절
 
-
-	public boolean myTurn;
-	public int myCardsCount;
+	public static int onBoardCardCount;
+	public static int[] stackCardCount = new int[2];
+	public static int[][] topCard = new int[2][2]; // ((과일, 개수), (과일, 개수))
 	
-	public int myStackCount;
-	public int opponentStackCount;
-	public int[] myTopCard; 	  // (과일, 개수)
-	public int[] opponentTopCard; // (과일, 개수)
-
-	
-	Random rd = new Random();
 
 
-
-	
-	public Game3() {
-
-		myTurn = true;
-		myCardsCount = TOTAL_CARDS / 2;
-		myStackCount = 0;
-		opponentStackCount = 0;
-
+	public void initGame() {
+		onBoardCardCount = 0;
+		stackCardCount[0] = TOTAL_CARDS / 2;
+		stackCardCount[1] = TOTAL_CARDS / 2;
 		clearBoard();
 	}
 	
 	public void clearBoard() {
-		myTopCard = new int[] {-1, -1};
-		opponentTopCard = new int[] {-1, -1};
+		topCard[0] = new int[] {-1, -1};
+		topCard[1] = new int[] {-1, -1};
 	}
 	
-	// 개수의 합이 5개인 과일이 있는지 확인
-	public boolean isSum5() {
+	// user가 종 누름. 개수의 합이 5개인 과일이 있는지 확인
+	public boolean isSum5(int user) {
 		int[] sums = {0, 0, 0, 0};
 
-		if (myTopCard[0] != -1) sums[myTopCard[0]] += myTopCard[1];
-		if (opponentTopCard[0] != -1) sums[opponentTopCard[0]] += opponentTopCard[1];
+		if (topCard[0][0] != -1) sums[topCard[0][0]] += topCard[0][1];
+		if (topCard[1][0] != -1) sums[topCard[1][0]] += topCard[1][1];
 
 		for (int sum: sums) {
-			if (sum == 5) return true;
+			if (sum == 5) { // 5개인 과일 있음
+				// 종 누른 user가 카드 가져감
+				stackCardCount[user] += onBoardCardCount;
+				onBoardCardCount = 0;
+
+				return true;
+			}
 		}
 
+		// 5개인 과일 없음
+		// 종 누른 user가 상대에게 카드 줌 
+		stackCardCount[user]--;
+		stackCardCount[1-user]++;
+		
 		return false;
 	}
 	
 
-	public boolean openCard() {
-		if (myTurn == false) {
-			return false;
-		}
+	public void openCard(int user) {
+		onBoardCardCount++;
+		stackCardCount[user]--;
 
-		myTopCard[0] = rd.nextInt(FRUITS);
-		myTopCard[1] = NUMBERS[rd.nextInt(NUMBERS.length)];
-
-
-		// game의 테스트를 위해 임시로 opponent도 랜덤 생성
-		// socket을 통해 상대가 누를 때 변경 되도록 구현해야 함
-		opponentTopCard[0] = rd.nextInt(FRUITS);
-		opponentTopCard[1] = NUMBERS[rd.nextInt(NUMBERS.length)];
-
-		myCardsCount--;
-		return true;
+		topCard[user][0] = rd.nextInt(FRUITS);
+		topCard[user][1] = NUMBERS[rd.nextInt(NUMBERS.length)];
 	}
 
-	// targetNumber가 전체 숫자 크기보다 크면 종료
-	public boolean isFinished() {
-		return myCardsCount == 0 || myCardsCount == TOTAL_CARDS;
+	// 둘 중 한 명이 카드를 모두 잃거나 음수가 되면 게임 종료
+	// 패자의 user번호 리턴
+	// 끝나지 않았으면 -1 리턴
+	public int isFinished() {
+		if (stackCardCount[0] == 0) {
+			return 0;
+		}
+		if (stackCardCount[1] == 0) {
+			return 1;
+		}
+		return -1;
 	}
 }
 

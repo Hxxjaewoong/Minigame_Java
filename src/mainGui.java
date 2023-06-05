@@ -298,10 +298,13 @@ class mainGui extends JFrame {
                         gg2.parseReceivedMessage(message);
                         break;
                     case 3:
+                        gg3.parseReceivedMessage(message);
                         break;
                     case 4:
+                        // gg4.parseReceivedMessage(message);
                         break;
                     case 5:
+                        // gg5.parseReceivedMessage(message);
                         break;
                 }
 
@@ -324,10 +327,13 @@ class mainGui extends JFrame {
                         gg2.parseReceivedMessage(message);
                         break;
                     case 3:
+                        gg3.parseReceivedMessage(message);
                         break;
                     case 4:
+                        // gg4.parseReceivedMessage(message);
                         break;
                     case 5:
+                        // gg5.parseReceivedMessage(message);
                         break;
                 }
     		}
@@ -341,7 +347,5 @@ class mainGui extends JFrame {
             }
         }
     }
-
-
 
 }

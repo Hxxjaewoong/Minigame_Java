@@ -134,6 +134,9 @@ public class GameManager extends Thread {
                         break;
 
                     case 3:
+                        game3.initGame();
+                        // first player
+                        initString = String.valueOf(rd.nextInt(2));
                         break;
 
                     case 4:
@@ -161,8 +164,8 @@ public class GameManager extends Thread {
                 return handleGame1(message);
             case 2:
                 return handleGame2(message);
-            // case 3:
-            //     return handleGame3(message);
+            case 3:
+                return handleGame3(message);
             // case 4:
             //     return handleGame4(message);
             // case 5:
@@ -179,7 +182,7 @@ public class GameManager extends Thread {
     public String handleGame1(String message) {
         String[] parsed = message.split(" ");
 
-        // "click user r c"
+        // "click [user] [r] [c]"
         // user가 (r,c)를 클릭함
         if (parsed[0].equals("click")) {
             int user = Integer.parseInt(parsed[1]);
@@ -208,7 +211,7 @@ public class GameManager extends Thread {
     // game2의 행동 처리
     public String handleGame2(String message) {
         String[] parsed = message.split(" ");
-        // "click user"
+        // "click [user] [r] [c]"
         // user가 (r,c)를 클릭함
         if (parsed[0].equals("click")) {
             int user = Integer.parseInt(parsed[1]);
@@ -228,6 +231,57 @@ public class GameManager extends Thread {
             } else {
                 return "notTarget " + user + " " + r + " " + c;
             }
+        }
+
+        return null;
+    }
+
+
+    // game3의 행동 처리
+    public String handleGame3(String message) {
+        String[] parsed = message.split(" ");
+
+        // "open [user]"
+        // user가 카드 open
+        if (parsed[0].equals("open")) {
+            int user = Integer.parseInt(parsed[1]);
+
+            game3.openCard(user);
+            int loser = game3.isFinished();
+
+            // 게임 끝 누군가 카드 0장 됨
+            if (loser != -1) {
+                return "finish open " + loser;
+            }
+
+            int topFruit = Game3.topCard[user][0];
+            int topNumber = Game3.topCard[user][1];
+
+            return "open " + user + " " + topFruit + " " + topNumber;
+        }
+
+
+        // "bell [user]"
+        // user가 종 누름
+        if (parsed[0].equals("bell")) {
+            int user = Integer.parseInt(parsed[1]);
+
+            boolean isSuccess = game3.isSum5(user);
+
+            int loser = game3.isFinished();
+
+            // 게임 끝 누군가 카드 0장 됨
+            if (loser != -1) {
+                return "finish bell " + loser;
+            }
+
+            // 성공: 5개인 과일 있음
+            if (isSuccess) {
+                return "success " + user + " " + Game3.stackCardCount[user];
+            }
+
+            // 실패
+            return "fail " + user;
         }
 
         return null;
