@@ -80,22 +80,17 @@ public class Game1 {
 	}
 	
 	
-	
 	// 선택한 위치에 target이 있는지 확인
-	// 상대 턴   -> -2
-	// 이미 열림 -> -1
-	// 나머지    -> 가장 가까운 target과의 거리 
-	public int checkPosition(int row, int col) {
+	// 가까운 target과의 거리 반환
+	public int isTarget(int row, int col) {
 		if (opened[row][col] == true) {
 			return -1;
 		}
 		
 		opened[row][col] = true;
-		if (map[row][col] == false) {
-			return getDistanceOfNearestTarget(row, col);
-		}
-		else {
-			// target 찾음. founded에 기록하고 count 증가
+
+		// target 찾음. founded에 기록하고 count 증가
+		if (map[row][col]) {
 			for (int target = 0; target < TARGET_COUNT; target++) {
 				if (targetPositions[target][0] == row && targetPositions[target][1] == col) {
 					targetFounded[target] = true;
@@ -104,11 +99,11 @@ public class Game1 {
 			}
 			foundCount++;
 			return 0;
+		} else {
+			return getDistanceOfNearestTarget(row, col);
 		}
 	}
 	
-
-
 
 	public void incScore(int userNumber) {
 		if (userNumber == 0) score0++;
@@ -116,8 +111,8 @@ public class Game1 {
 	}
 
 
-	// 다 찾으면 종료
 	public boolean isFinished() {
+		System.out.println(foundCount);
 		return foundCount == TARGET_COUNT;
 	}
 }

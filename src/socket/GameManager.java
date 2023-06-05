@@ -102,7 +102,7 @@ public class GameManager extends Thread {
 
         String[] parsed = message.split(" ");
 
-        // "start gameNumber"
+        // "start [gameNumber]"
         // 게임 시작버튼 누름
         if (parsed[0].equals("start")) {
             int gameNumber = Integer.parseInt(parsed[1]);
@@ -111,8 +111,10 @@ public class GameManager extends Thread {
             
             // 시작버튼 누른 게임이 같으면 게임 시작
             if (choice0 == choice1) {
-                playing = choice0;
+                
+                playing = choice0; // 시작할 game number 기록
                 String initString = "";
+
                 switch (playing) {
                     case 1:
                         game1.initTarget();
@@ -120,7 +122,12 @@ public class GameManager extends Thread {
                         initString = String.valueOf(rd.nextInt(2));
                         break;
                     case 2:
-                        // no need to initailize for game 2
+                        for (int r = 0; r < game2.SIZE; r++) {
+                            for (int c = 0; c < game2.SIZE; c++) {
+                                initString = initString + " " + String.valueOf(game2.layer1[r][c]);
+                            }
+                        }
+                        
                         break;
                     case 3:
                         break;
@@ -134,6 +141,9 @@ public class GameManager extends Thread {
             return null;
         }
 
+
+        // "exit [userNumber]"
+        // 유저 나감
         if (message.startsWith("exit")) {
             // 유저 나감
         }
@@ -179,7 +189,7 @@ public class GameManager extends Thread {
             int user = Integer.parseInt(parsed[1]);
             int r = Integer.parseInt(parsed[2]);
             int c = Integer.parseInt(parsed[3]);
-            int result = game1.checkPosition(r, c);
+            int result = game1.isTarget(r, c);
 
             if (result == -1) {
                 return "alreadyOpen";
@@ -188,7 +198,7 @@ public class GameManager extends Thread {
                 game1.incScore(user);
 
                 if (game1.isFinished()) {
-                    return "winner " + game1.score0 + " " + game1.score1;
+                    return "finish " + r + " " + c + " " + game1.score0 + " " + game1.score1;
                 }
                 return "target " + r + " " + c + " " + game1.foundCount;
             }
@@ -199,14 +209,24 @@ public class GameManager extends Thread {
         return null;
     }
 
+    // game2의 행동 처리
     public String handleGame2(String message) {
         String[] parsed = message.split(" ");
-        // "finish user"
+        // "click user"
         // user가 (r,c)를 클릭함
-        if (parsed[0].equals("finish")) {
+        if (parsed[0].equals("click")) {
             int user = Integer.parseInt(parsed[1]);
+            int r = Integer.parseInt(parsed[2]);
+            int c = Integer.parseInt(parsed[3]);
 
-
+			if (game2.isTargetNumber(r, c, user)) {
+                int nextTarget = game2.targetNumber[user];
+                if (game2.isFinished(user)) {
+                    return "finish " + user;
+                }
+                return "target " + user + " " + nextTarget;
+            }
+            else return "notTarget " + user;
         }
 
         return null;

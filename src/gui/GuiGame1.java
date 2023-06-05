@@ -14,8 +14,9 @@ public class GuiGame1 extends Game1 implements GamePanel {
 
 	Client client;
 	public boolean myTurn;
-	
 
+	public boolean playing;
+	
 	public JPanel panel;
 	public JPanel panelInfo;
     public JPanel panelPlay;
@@ -32,7 +33,8 @@ public class GuiGame1 extends Game1 implements GamePanel {
 		panelInfo.setPreferredSize(gameInfoArea);
 		panelInfo.setBackground(Color.yellow);
 
-		infoText = new JTextArea("Contains info of game1");
+		infoText = new JTextArea("상대방 대기 중...");
+		infoText.setFont(infoFont);
 		panelInfo.add(infoText);
 
 
@@ -81,19 +83,25 @@ public class GuiGame1 extends Game1 implements GamePanel {
 	// 결과 메시지를 파싱해서 결과 처리
 	public void parseReceivedMessage(String message) {
 		String[] parsedMessage = message.split(" ");
-		System.out.println(message);
+		System.out.println("<<< " + message);
 
-		// "init [r0] [c0] [r1] [c1] ...  [r4] [c4]"
-		// 보물 초기화. 행과 열에 따라 보물 할당
-		// 이건 필요 없네. game2에는 필요함
-
+		// 게임 시작
 		if (parsedMessage[0].equals("start")) {
 			initTarget();
 			initButtons();
-			
 
 			int firstUserNumber = Integer.parseInt(parsedMessage[2]);
-			myTurn = (firstUserNumber == client.userNumber);
+			if (firstUserNumber == client.userNumber) {
+				myTurn = true;
+				infoText.setText("Game start\nYour Turn");
+			}
+			else {
+				myTurn = false;
+				infoText.setText("Game start\nOpponent's Turn");
+			}
+
+			playing = true;
+
 			return;
 		}
 
@@ -102,24 +110,39 @@ public class GuiGame1 extends Game1 implements GamePanel {
 		// "alreadyOpen"
 		// 이미 열린 버튼. 아무 행동 안 함
 		if (parsedMessage[0].equals("alreadyOpen")) {
-			System.out.println("이미 열린 버튼입니다.");
+			infoText.setText("이미 열린 버튼입니다.");
 			return;
 		}
 		
 		int r = Integer.parseInt(parsedMessage[1]);
 		int c = Integer.parseInt(parsedMessage[2]);
 
-		// "winner [user]"
+		// "finish [r] [c] [user0score] [user1score]"
 		// 보물 찾음. 버튼 오픈. 게임 종료
-		if (parsedMessage[0].equals("winner")) {
-			System.out.println("Target Found! " + foundCount);
+		if (parsedMessage[0].equals("finish")) {
+			int user0score = Integer.parseInt(parsedMessage[3]);
+			int user1score = Integer.parseInt(parsedMessage[4]);
+
 			buttons[r][c].setText("축");
-			buttons[r][c].setBackground(Color.gray);
-			if (myTurn) {
-				System.out.println("I'm a winner!");
+			buttons[r][c].setBackground(Color.lightGray);
+
+			infoText.setText(r+"행 "+c+"열 클릭! 마지막 보물 발견!\n");
+			// 경우의 수에 따라 메시지 변경
+			if (client.userNumber == 0) {
+				if (user0score > user1score) {
+					infoText.append("나 " + user0score + " : " + user1score + " 상대         I'm a winner!");
+				} else {
+					infoText.append("나 " + user0score + " : " + user1score + " 상대         I'm a loser...");
+				}
 			} else {
-				System.out.println("I'm a loser...");
+				if (user0score < user1score) {
+					infoText.append("나 " + user1score + " : " + user0score + " 상대         I'm a winner!");
+				} else {
+					infoText.append("나 " + user1score + " : " + user0score + " 상대         I'm a loser...");
+				}
 			}
+
+			playing = false;
 			return;
 		}
 
@@ -127,9 +150,9 @@ public class GuiGame1 extends Game1 implements GamePanel {
 		// 보물 찾음. 버튼 오픈
 		if (parsedMessage[0].equals("target")) {
 			int foundCount = Integer.parseInt(parsedMessage[3]);
-			System.out.println(foundCount + " target found!");
+			infoText.setText(r+"행 "+c+"열 클릭! " + foundCount + "번째 보물 발견!");
 			buttons[r][c].setText("축");
-			buttons[r][c].setBackground(Color.gray);
+			buttons[r][c].setBackground(Color.lightGray);
 			myTurn = !myTurn; // 턴 변경
 			return;
 		}
@@ -138,14 +161,12 @@ public class GuiGame1 extends Game1 implements GamePanel {
 		// 빈칸. 버튼 오픈. 가까운 보물 거리 알려줌.
 		if (parsedMessage[0].equals("empty")) {
 			int distance = Integer.parseInt(parsedMessage[3]);
-			System.out.println(r+"행 "+c+"열 - " + "가장 가까운 거리: " + distance);
+			infoText.setText(r+"행 "+c+"열 클릭! " + "가장 가까운 보물과의 거리 = " + distance);
 			buttons[r][c].setText("꽝");
-			buttons[r][c].setBackground(Color.white);
+			buttons[r][c].setBackground(Color.darkGray);
 			myTurn = !myTurn; // 턴 변경
 			return;
 		}
-
-
 	}
 
 
@@ -155,9 +176,14 @@ public class GuiGame1 extends Game1 implements GamePanel {
     	
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			// 게임 종료됨. 클릭 불가
+			if (!playing) {
+				return;
+			}
+
 			// 자신의 턴이 아님 -> 클릭 불가
 			if (!myTurn) {
-				System.out.println("It's not your turn.");
+				infoText.setText("It's opponent's turn...\nPlease wait for a while");
 				return;
 			}
 
@@ -170,6 +196,5 @@ public class GuiGame1 extends Game1 implements GamePanel {
 			client.sendMessage("click " + client.userNumber + " " + r + " " + c ); // "click 0 1 2"
 
 		}
-
     }
 }
