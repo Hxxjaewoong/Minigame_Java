@@ -122,7 +122,7 @@ class mainGui extends JFrame {
         
         exitButton = new JButton("Exit");
         exitButton.setPreferredSize(new Dimension(60, 30));
-        exitButton.setActionCommand("Exit");
+        exitButton.setActionCommand("exit");
         exitButton.addActionListener(new ButtonClickListener());
         
 
@@ -159,14 +159,13 @@ class mainGui extends JFrame {
 
 
         // 서버로부터 메시지 받아 처리하는 쓰레드 실행
-		new getMessageThread().start();
+		new GetMessageThread().start();
 
     }
 
 
-
-    // panel1에 있는 요소 제거
-    private void clearPanel1() {
+    // gamePanel에 있는 요소 제거
+    private void clearGamePanel() {
         gamePanel.removeAll();
         gamePanel.revalidate();
         gamePanel.repaint();
@@ -174,10 +173,7 @@ class mainGui extends JFrame {
 
 
 
-
-
-
-    // panel1에 설명을 보여주는 메소드
+    // gamePanel에 설명을 보여주는 메소드
     private void showGameInstructions(int game) {
        
         String instructions = "";
@@ -203,7 +199,7 @@ class mainGui extends JFrame {
         }
         instructionsLabel.setText(instructions);
         
-        clearPanel1();
+        clearGamePanel();
         gamePanel.add(instructionsLabel, BorderLayout.CENTER);
     }
 
@@ -218,59 +214,50 @@ class mainGui extends JFrame {
 
             // 선택한 게임이 있다면 게임 시작
             if (command.equals("Start Game")) {
-                clearPanel1();
+                clearGamePanel();
                 switch (gameChoice) {
                     case 1:
                         gamePanel.add(gg1.panel);
-                        client.sendMessage("start " + client.userNumber + " 1");
                         break;
                     case 2:
                         gamePanel.add(gg2.panel);
-                        client.sendMessage("start " + client.userNumber + " 2");
                         break;
                     case 3:
                         gamePanel.add(gg3.panel);
-                        client.sendMessage("start " + client.userNumber + " 3");
                         break;
                     case 4:
                         gamePanel.add(gg4.panel);
-                        client.sendMessage("start " + client.userNumber + " 4");
                         break;
                     case 5:
                         gamePanel.add(gg5.panel);
-                        client.sendMessage("start " + client.userNumber + " 5");
                         break;
                     default:
                         showGameInstructions(gameChoice);
-                        break;
+                        return;
                 }
+                
+                client.sendMessage("start " + client.userNumber + " " + gameChoice);
+                gameChoice = 0;
+                return;
             }
 
-
             // 프로그램 종료
-            else if (command.equals("Exit")) {
-                client.sendMessage("exit " + client.userNumber);
+            if (command.equals("exit")) {
                 System.exit(0);
             }
             
-
             // 게임 선택 (1~5)
-            else {
-                int numberChosenGame = Integer.parseInt(command); // 선택한 게임의 순번
-                gameChoice = numberChosenGame;
-                showGameInstructions(numberChosenGame);
-            }
+            int numberChosenGame = Integer.parseInt(command); // 선택한 게임의 순번
+            gameChoice = numberChosenGame;
+            showGameInstructions(numberChosenGame);
         }
     }
-
-
-
 
 
 	public String receivedMessage;
     public int currentGame = 0;
 
-	private class getMessageThread extends Thread {
+	private class GetMessageThread extends Thread {
 
         @Override
         public void run() {
@@ -284,12 +271,27 @@ class mainGui extends JFrame {
                 }
             }
         }
-
-
         	
         // 결과 메시지를 파싱해서 결과 처리
         public void parseReceivedMessage(String message) {
             String[] parsedMessage = message.split(" ");
+
+            // "exit"
+            // 상대가 게임 종료함 -> 3초 뒤에 게임 종료
+            if (parsedMessage[0].equals("EXIT")) {
+                try {
+                    clearGamePanel();
+                    gamePanel.add(instructionsLabel);
+                    for (int i = 3; i >= 1; i--) {
+                        instructionsLabel.setText("The opponent has quit the game.\nThe game will end in " + i + " seconds.");
+                        Thread.sleep(1000);
+                    }
+                    System.exit(0);
+                    
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
 
             // "start [gameNumber] ([initString])"
             // 세번째 인자는 여기서는 무시해도 됨
@@ -319,15 +321,8 @@ class mainGui extends JFrame {
                 return;
     		}
 
-            // "end"
-            // 현재 게임 종료
-            if (parsedMessage[0].equals("end")) {
-                currentGame = 0;
-                clearPanel1();
-                return;
-            }
-
-
+            // start 이외의 메시지
+            // -> 플레이 중인 각 게임의 gui에서 처리하도록 함
             switch (currentGame) {
                 case 1:
                     gg1.parseReceivedMessage(message);
@@ -344,8 +339,6 @@ class mainGui extends JFrame {
                 case 5:
                     // gg5.parseReceivedMessage(message);
                     break;
-                default:
-                    ;
             }
 
             return;

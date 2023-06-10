@@ -63,7 +63,6 @@ public class GameManager {
                         // first player
                         initString = String.valueOf(rd.nextInt(2));
                         break;
-
                     case 2:
                         game2.initGame();
                         // 타일 배치 전달
@@ -73,31 +72,23 @@ public class GameManager {
                             }
                         }
                         break;
-
                     case 3:
                         game3.initGame();
                         // first player
                         initString = String.valueOf(rd.nextInt(2));
                         break;
-
                     case 4:
                         break;
-
                     case 5:
                         break;
                 }
-                
+
                 return "start " + playingNumber + " " + initString; // "start [gameNumber] [initString]"
             }
+
             return null;
         }
 
-
-        // "exit [userNumber]"
-        // 유저 나감
-        if (message.startsWith("exit")) {
-            // 유저 나감
-        }
 
         // 게임 시작이나 종료가 아니면
         // 게임별로 각각의 method가 처리

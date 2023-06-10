@@ -55,7 +55,8 @@ public class Client implements Runnable {
                 }
 
             } catch (IOException e) {
-                e.printStackTrace();
+                // mainGui에서 종료하도록
+                receivedMessage = "EXIT";
             }
         }
     }
@@ -73,9 +74,8 @@ public class Client implements Runnable {
     }
 
 
-    
     // 서버로부터 받은 메시지를 각 게임에게 전달하고 받은 메시지는 null로 set
-    // receivedMessage 변수의 잠금 필요
+    // 동기화 필요
     public synchronized String getReceivedMessage() {
         String temp = receivedMessage;
         if (temp != null) {

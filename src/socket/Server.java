@@ -8,6 +8,7 @@ import java.net.Socket;
 
 public class Server implements Runnable {
     private final int MAX_USER = 2;
+    private Socket[] clientSockets = new Socket[2];
     private DataInputStream[] in = new DataInputStream[2];
     private DataOutputStream[] out = new DataOutputStream[2];
 
@@ -22,11 +23,11 @@ public class Server implements Runnable {
 
             int userNumber = 0;
             while (userNumber < MAX_USER) {
-                Socket socket = serverSocket.accept(); // 클라이언트 연결 수락
+                clientSockets[userNumber] = serverSocket.accept(); // 클라이언트 연결 수락
 
-                in[userNumber] = new DataInputStream(socket.getInputStream());
-                out[userNumber] = new DataOutputStream(socket.getOutputStream());
-                
+                in[userNumber] = new DataInputStream(clientSockets[userNumber].getInputStream());
+                out[userNumber] = new DataOutputStream(clientSockets[userNumber].getOutputStream());
+
                 // 유저 번호 알려줌
                 out[userNumber].writeInt(userNumber);
 
@@ -51,7 +52,7 @@ public class Server implements Runnable {
     }
     
     // 클라이언트에게 메시지를 받아 응답 보내는 쓰레드를 위한 클래스
-    class GetMessage implements Runnable {
+    private class GetMessage implements Runnable {
         int userNumber;
 
         public GetMessage(int userNumber) {
@@ -66,6 +67,7 @@ public class Server implements Runnable {
                     
                     if (message != null) {
                         System.out.println("SER <<< " + message);
+
                         String response = gameManager.handleReceivedMessage(message);
 
                         if (response != null) {
@@ -74,7 +76,11 @@ public class Server implements Runnable {
                     }
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                try {
+                    clientSockets[0].close();
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
             }
         }
     }

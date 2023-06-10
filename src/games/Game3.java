@@ -52,6 +52,7 @@ public class Game3 {
 				// 종 누른 user가 카드 가져감
 				stackCardCount[user] += onBoardCardCount;
 				onBoardCardCount = 0;
+				clearBoard();
 
 				return true;
 			}
