@@ -144,6 +144,11 @@ public class GuiGame3 extends Game3 implements GamePanel {
 		}
 	}
 
+	void clearOnBoardCard() {
+		myCardLabel.setIcon(null);
+		opponentCardLabel.setIcon(null);
+	}
+
 
 
 	// 결과 메시지를 파싱해서 결과 처리
@@ -153,8 +158,6 @@ public class GuiGame3 extends Game3 implements GamePanel {
 		// "start [gameNumber] [firstUserNumber]"
 		// 게임 시작
 		if (parsedMessage[0].equals("start")) {
-			initGame();
-
 			int firstUserNumber = Integer.parseInt(parsedMessage[2]);
 			if (firstUserNumber == client.userNumber) {
 				myTurn = true;
@@ -186,13 +189,13 @@ public class GuiGame3 extends Game3 implements GamePanel {
 				if (behave.equals("bell")) {
 					opponentCardCount.setText(String.valueOf(opponentCount+1));
 				}
-				infoText.setText("아 이걸 지네");
+				infoText.setText("패배!");
 			} else {
 				if (behave.equals("bell")) {
 					myCardCount.setText(String.valueOf(myCount+1));
 				}
 				opponentCardCount.setText(String.valueOf(opponentCount-1));
-				infoText.setText("아싸 이겼당 ㅋㅋ");
+				infoText.setText("승리!");
 			}
 
 			playing = false;
@@ -216,7 +219,9 @@ public class GuiGame3 extends Game3 implements GamePanel {
 				opponentCardCount.setText(String.valueOf(opponentCount-1));
 			}
 			
-			infoText.setText("두둥탁");
+			if (client.userNumber == user) infoText.setText("내가 카드 오픈!");
+			else infoText.setText("상대가 카드 오픈!");
+
 			myTurn = !myTurn;
 			return;
 		}
@@ -225,9 +230,7 @@ public class GuiGame3 extends Game3 implements GamePanel {
 		// "success [user] [stackCardCount of user]"
 		// 종 누르기 성공. 스택의 카드 개수 수정
 		if (parsedMessage[0].equals("success")) {
-			clearBoard();
-			myCardLabel.setIcon(null);
-			opponentCardLabel.setIcon(null);
+			clearOnBoardCard();
 
 			int user = Integer.parseInt(parsedMessage[1]);
 			int count = Integer.parseInt(parsedMessage[2]);
@@ -251,22 +254,16 @@ public class GuiGame3 extends Game3 implements GamePanel {
 			if (user == client.userNumber) {
 				myCardCount.setText(String.valueOf(myCount-1));
 				opponentCardCount.setText(String.valueOf(opponentCount+1));
-				infoText.setText("아 잰장 실수핸네 다음애눈 잘 하자!");
+				infoText.setText("당신의 실수!");
 			} else {
 				myCardCount.setText(String.valueOf(myCount+1));
 				opponentCardCount.setText(String.valueOf(opponentCount-1));
-				infoText.setText("상대 개못하누ㅋㅋ");
+				infoText.setText("상대의 실수!");
 			}
 
 			return;
 		}
 	}
-
-
-
-
-
-
 
 
 	
