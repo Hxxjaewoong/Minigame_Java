@@ -5,7 +5,7 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.net.Socket;
 
-public class Client implements Runnable{
+public class Client implements Runnable {
     public int userNumber;
     private DataInputStream in;
     private DataOutputStream out;

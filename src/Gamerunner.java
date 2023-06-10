@@ -5,19 +5,19 @@ import java.io.IOException;
 import socket.Client;
 import socket.Server;
 
-public class Gamerunner extends Thread{
+public class Gamerunner {
 
 	public static Start start;
-	static Server server;
-	static Client client;
+	public static Server server;
+	public static Client client;
 
 	public static void main(String[] args) throws IOException {
-		JFrame frame = new JFrame("Mini Game");
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setLayout(new BorderLayout());
+		JFrame logInFrame = new JFrame("Mini Game");
+		logInFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		logInFrame.setLayout(new BorderLayout());
 		
 		start = new Start();
-		frame.getContentPane().add(start, BorderLayout.NORTH);
+		logInFrame.getContentPane().add(start, BorderLayout.NORTH);
 		ImageIcon icon = new ImageIcon("game.jpg"); //아직 이미지 추가하지 않았음
         Image img = icon.getImage();
 
@@ -28,26 +28,27 @@ public class Gamerunner extends Thread{
             }
         };
         
-        frame.getContentPane().add(new Start(),BorderLayout.NORTH);
-        frame.getContentPane().add(imagePanel, BorderLayout.CENTER);
-        frame.setSize(500,500);
-		frame.setVisible(true);	
+        logInFrame.getContentPane().add(new Start(),BorderLayout.NORTH);
+        logInFrame.getContentPane().add(imagePanel, BorderLayout.CENTER);
+        logInFrame.setSize(500,500);
+		logInFrame.setVisible(true);	
 
-
+		// start button을 누를 때까지 spin
 		while (start.getIp() == null) {;}
 		
-
+		// 1P면 서버도 열어야 함
 		if (start.getSer()) {
-			server = new Server();
-			Thread s = new Thread(server);
-			s.start();
+			Server server = new Server();
+			Thread serverThread = new Thread (server);
+			serverThread.start();
 		}
-		
-		client = new Client(start.getIp());
-		Thread c = new Thread(client);
-		c.start();
 
-		frame.dispose();
+		Client client = new Client(start.getIp());
+		Thread clientThread = new Thread (client);
+		clientThread.start();
+
+		// login창 숨기고 게임 창 띄우기
+		logInFrame.dispose();
 		mainGui maingui = new mainGui(client);
 	}
 }

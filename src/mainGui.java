@@ -1,3 +1,7 @@
+// 상대방이 접속해야 게임 시작 가능하도록 해야 오류 안남
+
+
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,11 +17,12 @@ import gui.GuiGame5;
 
 
 class mainGui extends JFrame {
+    public Client client;
 
     // panels
-    public JPanel panel1;
-    public JPanel panel2;
-    public JPanel panel3;
+    public JPanel gamePanel;
+    public JPanel selectPanel;
+    public JPanel behavePanel;
 
     // buttons
     public JButton startButton;
@@ -37,13 +42,17 @@ class mainGui extends JFrame {
     public Color panelBackgroundColor = new Color(102, 102, 102);
 
 
+    // main image
+    JLabel mainInitialImageLabel;
+    Image mainInitialImage;
+
     // image icons
-    ImageIcon mainInitialImage = new ImageIcon("image/MINIGAME_MAIN.jpg");
-    ImageIcon game1Image = new ImageIcon("image/TREASUREHUNT.jpg");
-    ImageIcon game2Image = new ImageIcon("image/NUMBERGAME.jpg");
-    ImageIcon game3Image = new ImageIcon("image/HALLIGALLI.jpg");
-    ImageIcon game4Image = new ImageIcon("image/DIRECTIONGAME.jpg");
-    ImageIcon game5Image = new ImageIcon("image/DIRECTIONGAME.jpg");
+    ImageIcon mainInitialImageIcon = new ImageIcon("image/MINIGAME_MAIN.jpg");
+    ImageIcon game1ImageIcon = new ImageIcon("image/TREASUREHUNT.jpg");
+    ImageIcon game2ImageIcon = new ImageIcon("image/NUMBERGAME.jpg");
+    ImageIcon game3ImageIcon = new ImageIcon("image/HALLIGALLI.jpg");
+    ImageIcon game4ImageIcon = new ImageIcon("image/DIRECTIONGAME.jpg");
+    ImageIcon game5ImageIcon = new ImageIcon("image/DIRECTIONGAME.jpg");
 
     mainGui(Client client) {
         this.client = client;
@@ -51,20 +60,18 @@ class mainGui extends JFrame {
         setTitle("Mini Game");
 
         // panel1: 초기화면 및 게임 화면
-        panel1 = new JPanel();
-        panel1.setBackground(panelBackgroundColor);
-        panel1.setBounds(20, 20, 460, 520);
-        panel1.setLayout(new BorderLayout());
+        gamePanel = new JPanel();
+        gamePanel.setBackground(panelBackgroundColor);
+        gamePanel.setBounds(20, 20, 460, 520);
+        gamePanel.setLayout(new BorderLayout());
 
 
-        JLabel imageLabel;
         
+        mainInitialImage = mainInitialImageIcon.getImage().getScaledInstance(460, 520, Image.SCALE_SMOOTH);
+        mainInitialImageIcon = new ImageIcon(mainInitialImage);
+        mainInitialImageLabel = new JLabel(mainInitialImageIcon);
 
-        Image image = mainInitialImage.getImage().getScaledInstance(460, 520, Image.SCALE_SMOOTH);
-        mainInitialImage = new ImageIcon(image);
-        imageLabel = new JLabel(mainInitialImage);
-
-        panel1.add(imageLabel, BorderLayout.CENTER);
+        gamePanel.add(mainInitialImageLabel, BorderLayout.CENTER);
 
         gg1 = new GuiGame1(client);
         gg2 = new GuiGame2(client);
@@ -74,17 +81,17 @@ class mainGui extends JFrame {
 
 
         // panel2: 게임 선택 버튼
-        panel2 = new JPanel();
-        panel2.setBackground(panelBackgroundColor);
-        panel2.setBounds(500, 20, 180, 450);
-        panel2.setLayout(new GridLayout(5, 1)); // 5개의 게임 목록을 세로로 배치하기 위해 GridLayout 설정
+        selectPanel = new JPanel();
+        selectPanel.setBackground(panelBackgroundColor);
+        selectPanel.setBounds(500, 20, 180, 450);
+        selectPanel.setLayout(new GridLayout(5, 1)); // 5개의 게임 목록을 세로로 배치하기 위해 GridLayout 설정
 
         
-        JButton game1Button = new JButton(game1Image);
-        JButton game2Button = new JButton(game2Image);
-        JButton game3Button = new JButton(game3Image);
-        JButton game4Button = new JButton(game4Image);
-        JButton game5Button = new JButton(game5Image);
+        JButton game1Button = new JButton(game1ImageIcon);
+        JButton game2Button = new JButton(game2ImageIcon);
+        JButton game3Button = new JButton(game3ImageIcon);
+        JButton game4Button = new JButton(game4ImageIcon);
+        JButton game5Button = new JButton(game5ImageIcon);
 
         game1Button.setActionCommand("1");
         game2Button.setActionCommand("2");
@@ -103,10 +110,10 @@ class mainGui extends JFrame {
 
 
         // panel 3: 시작 및 종료 버튼
-        panel3 = new JPanel();
-        panel3.setBackground(panelBackgroundColor);
-        panel3.setBounds(500, 500, 180, 40);
-        panel3.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+        behavePanel = new JPanel();
+        behavePanel.setBackground(panelBackgroundColor);
+        behavePanel.setBounds(500, 500, 180, 40);
+        behavePanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
         
         startButton = new JButton("Start Game");
         startButton.setPreferredSize(new Dimension(100, 30));
@@ -123,18 +130,18 @@ class mainGui extends JFrame {
         setLayout(null);
 
 
-        panel2.add(game1Button);
-        panel2.add(game2Button);
-        panel2.add(game3Button);
-        panel2.add(game4Button);
-        panel2.add(game5Button);
+        selectPanel.add(game1Button);
+        selectPanel.add(game2Button);
+        selectPanel.add(game3Button);
+        selectPanel.add(game4Button);
+        selectPanel.add(game5Button);
         
-        panel3.add(startButton);
-        panel3.add(exitButton);
+        behavePanel.add(startButton);
+        behavePanel.add(exitButton);
         
-        add(panel1);
-        add(panel2);
-        add(panel3);
+        add(gamePanel);
+        add(selectPanel);
+        add(behavePanel);
 
 
         // instruction label 초기화
@@ -160,9 +167,9 @@ class mainGui extends JFrame {
 
     // panel1에 있는 요소 제거
     private void clearPanel1() {
-        panel1.removeAll();
-        panel1.revalidate();
-        panel1.repaint();
+        gamePanel.removeAll();
+        gamePanel.revalidate();
+        gamePanel.repaint();
     }
 
 
@@ -197,7 +204,7 @@ class mainGui extends JFrame {
         instructionsLabel.setText(instructions);
         
         clearPanel1();
-        panel1.add(instructionsLabel, BorderLayout.CENTER);
+        gamePanel.add(instructionsLabel, BorderLayout.CENTER);
     }
 
 
@@ -214,23 +221,23 @@ class mainGui extends JFrame {
                 clearPanel1();
                 switch (gameChoice) {
                     case 1:
-                        panel1.add(gg1.panel);
+                        gamePanel.add(gg1.panel);
                         client.sendMessage("start " + client.userNumber + " 1");
                         break;
                     case 2:
-                        panel1.add(gg2.panel);
+                        gamePanel.add(gg2.panel);
                         client.sendMessage("start " + client.userNumber + " 2");
                         break;
                     case 3:
-                        panel1.add(gg3.panel);
+                        gamePanel.add(gg3.panel);
                         client.sendMessage("start " + client.userNumber + " 3");
                         break;
                     case 4:
-                        panel1.add(gg4.panel);
+                        gamePanel.add(gg4.panel);
                         client.sendMessage("start " + client.userNumber + " 4");
                         break;
                     case 5:
-                        panel1.add(gg5.panel);
+                        gamePanel.add(gg5.panel);
                         client.sendMessage("start " + client.userNumber + " 5");
                         break;
                     default:
@@ -242,7 +249,7 @@ class mainGui extends JFrame {
 
             // 프로그램 종료
             else if (command.equals("Exit")) {
-                System.out.println("Exit");
+                client.sendMessage("exit " + client.userNumber);
                 System.exit(0);
             }
             
@@ -260,11 +267,8 @@ class mainGui extends JFrame {
 
 
 
-
-
-    public Client client;
 	public String receivedMessage;
-    private int currentGame = 0;
+    public int currentGame = 0;
 
 	private class getMessageThread extends Thread {
 

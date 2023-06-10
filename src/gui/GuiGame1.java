@@ -23,6 +23,10 @@ public class GuiGame1 extends Game1 implements GamePanel {
     public static JButton buttons[][] = new JButton[MAP_SIZE][MAP_SIZE];
 	public JTextArea infoText;
 	
+	private Color HIDE_COLOR = Color.gray;
+	private Color TARGET_COLOR = Color.yellow;
+	private Color EMPTY_COLOR = Color.darkGray;
+
 	public GuiGame1(Client client) {
 		this.client = client;
 
@@ -40,7 +44,7 @@ public class GuiGame1 extends Game1 implements GamePanel {
 
         panelPlay = new JPanel();
         panelPlay.setPreferredSize(gamePlayArea);
-        panelPlay.setBackground(Color.gray);
+        panelPlay.setBackground(Color.white);
         panelPlay.setLayout(new GridLayout(MAP_SIZE, MAP_SIZE, 5, 5));
         
 		for (int r = 0; r < MAP_SIZE; r++) {
@@ -48,8 +52,8 @@ public class GuiGame1 extends Game1 implements GamePanel {
         		JButton button = new JButton();
         		
         		// 버튼 디자인 및 위치
-        		button.setBackground(Color.pink);
-        		button.setBorder(BorderFactory.createLineBorder(Color.red, 2));
+        		button.setBackground(HIDE_COLOR);
+        		button.setBorder(BorderFactory.createLineBorder(Color.black, 2));
 				button.setFont(game1ButtonFont);
         
                 // 버튼 클릭 이벤트
@@ -72,7 +76,7 @@ public class GuiGame1 extends Game1 implements GamePanel {
 	public void initButtons() {
 		for (int r = 0; r < MAP_SIZE; r++) {
         	for (int c = 0; c < MAP_SIZE; c++) {
-        		buttons[r][c].setBackground(Color.pink);
+        		buttons[r][c].setBackground(HIDE_COLOR);
 				buttons[r][c].setText("???");
         	}
         }
@@ -106,10 +110,13 @@ public class GuiGame1 extends Game1 implements GamePanel {
 
 
 
-		// "alreadyOpen"
+		// "alreadyOpen [user]"
 		// 이미 열린 버튼. 아무 행동 안 함
 		if (parsedMessage[0].equals("alreadyOpen")) {
-			infoText.setText("이미 열린 버튼입니다.");
+			int userNumber = Integer.parseInt(parsedMessage[1]);
+			if (client.userNumber == userNumber) {
+				infoText.setText("이미 열린 버튼입니다.");
+			}
 			return;
 		}
 		
@@ -122,8 +129,8 @@ public class GuiGame1 extends Game1 implements GamePanel {
 			int user0score = Integer.parseInt(parsedMessage[3]);
 			int user1score = Integer.parseInt(parsedMessage[4]);
 
-			buttons[r][c].setText("축");
-			buttons[r][c].setBackground(Color.lightGray);
+			buttons[r][c].setText("");
+			buttons[r][c].setBackground(TARGET_COLOR);
 
 			infoText.setText(r+"행 "+c+"열 클릭! 마지막 보물 발견!\n");
 			// 경우의 수에 따라 메시지 변경
@@ -150,8 +157,8 @@ public class GuiGame1 extends Game1 implements GamePanel {
 		if (parsedMessage[0].equals("target")) {
 			int foundCount = Integer.parseInt(parsedMessage[3]);
 			infoText.setText(r+"행 "+c+"열 클릭! " + foundCount + "번째 보물 발견!");
-			buttons[r][c].setText("축");
-			buttons[r][c].setBackground(Color.lightGray);
+			buttons[r][c].setText("");
+			buttons[r][c].setBackground(TARGET_COLOR);
 			myTurn = !myTurn; // 턴 변경
 			return;
 		}
@@ -161,8 +168,8 @@ public class GuiGame1 extends Game1 implements GamePanel {
 		if (parsedMessage[0].equals("empty")) {
 			int distance = Integer.parseInt(parsedMessage[3]);
 			infoText.setText(r+"행 "+c+"열 클릭! " + "가장 가까운 보물과의 거리 = " + distance);
-			buttons[r][c].setText("꽝");
-			buttons[r][c].setBackground(Color.darkGray);
+			buttons[r][c].setText("");
+			buttons[r][c].setBackground(EMPTY_COLOR);
 			myTurn = !myTurn; // 턴 변경
 			return;
 		}

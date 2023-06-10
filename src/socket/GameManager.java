@@ -1,9 +1,5 @@
 package socket;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.net.Socket;
 import java.util.Random;
 
 import games.Game1;
@@ -14,7 +10,7 @@ import games.Game5;
 
 
 
-public class GameManager extends Thread {
+public class GameManager {
     Random rd = new Random();
 
     // static으로 선언해야 멀티쓰레드에서도 같은 게임을 다루게 됨
@@ -26,72 +22,22 @@ public class GameManager extends Thread {
     public static Game4 game4;
     public static Game5 game5;
 
-    private Socket socket;
-    private DataInputStream in;
-    private DataOutputStream[] out;
-
     public static int playingNumber; // 어떤 게임을 플레이하고 있는지
     public static int[] choice = new int[2];
     
-    public GameManager(Socket socket, int userNumber, DataOutputStream[] out) {
+    public GameManager() {
 
         game1 = new Game1();
         game2 = new Game2();
         game3 = new Game3();
         game4 = new Game4();
         game5 = new Game5();
-
-        this.socket = socket;
-        this.out = out;
         
         playingNumber = 0;
         choice[0] = 0;
         choice[1] = 0;
-
-        try {
-            in = new DataInputStream(socket.getInputStream());
-            out[userNumber] = new DataOutputStream(socket.getOutputStream());
-            
-            // 유저 번호 알려줌
-            out[userNumber].writeInt(userNumber);
-            out[userNumber].flush();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
-    @Override
-    public void run() {
-        try {
-            while (true) {
-                String message = in.readUTF(); // 클라이언트로부터 메시지 수신
-
-                if (message != null) {
-                    System.out.println("<<< " + message);
-                    String response = handleReceivedMessage(message);
-                    System.out.println(">>> " + response);
-
-                    if (response != null) {
-                        out[0].writeUTF(response);
-                        out[0].flush();
-                        out[1].writeUTF(response);
-                        out[1].flush();
-                    }
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                in.close();
-                out[0].close();
-                out[1].close();
-                socket.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
 
 
     // 클라이언트로부터 받은 메시지 처리
@@ -100,13 +46,13 @@ public class GameManager extends Thread {
         String[] parsed = message.split(" ");
 
         // "start [user] [gameNumber]"
-        // 게임 시작버튼 누름
+        // 게임 시작 버튼 누름
         if (parsed[0].equals("start")) {
             int user = Integer.parseInt(parsed[1]);
             int gameNumber = Integer.parseInt(parsed[2]);
             choice[user] = gameNumber;
             
-            // 시작버튼 누른 게임이 같으면 게임 시작
+            // 시작 버튼 누른 게임이 같으면 게임 시작
             if (choice[0] == choice[1]) {
                 playingNumber = choice[0]; // 시작할 game number 기록
                 String initString = "";
@@ -153,7 +99,7 @@ public class GameManager extends Thread {
             // 유저 나감
         }
 
-        // 게임 선택이 아니면
+        // 게임 시작이나 종료가 아니면
         // 게임별로 각각의 method가 처리
         switch (playingNumber) {
             case 1:
@@ -187,13 +133,13 @@ public class GameManager extends Thread {
             int result = game1.isTarget(r, c);
 
             if (result == -1) {
-                return "alreadyOpen";
+                return "alreadyOpen " + user;
             }
             if (result == 0) {
                 game1.incScore(user);
 
                 if (game1.isFinished()) {
-                    return "finish " + r + " " + c + " " + game1.score0 + " " + game1.score1;
+                    return "finish " + r + " " + c + " " + game1.score[0] + " " + game1.score[1];
                 }
                 return "target " + r + " " + c + " " + game1.foundCount;
             }

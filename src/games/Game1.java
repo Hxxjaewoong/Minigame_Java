@@ -19,9 +19,7 @@ public class Game1 {
 	public final static int MAP_SIZE = 10;
 	public final static int TARGET_COUNT = 5;
 
-	public int score0;
-	public int score1;
-
+	public int[] score = new int[2];
 
 	public boolean[][] map = new boolean[MAP_SIZE][MAP_SIZE];    // target이 있는지
 	public boolean[][] opened = new boolean[MAP_SIZE][MAP_SIZE]; // 확인했는지
@@ -31,8 +29,8 @@ public class Game1 {
 	
 	// map에 무작위로 5개의 target을 표시하고 그 위치를 기록함. targetFounded는 false로 초기화
 	public void initGame() {
-		score0 = 0;
-		score1 = 0;
+		score[0] = 0;
+		score[1] = 0;
 		foundCount = 0;
 
 		// fill map and opened with false
@@ -99,10 +97,9 @@ public class Game1 {
 		}
 	}
 	
-
+	// target 찾음 -> 점수 증가
 	public void incScore(int userNumber) {
-		if (userNumber == 0) score0++;
-		else                 score1++;
+		score[userNumber]++;
 	}
 
 

@@ -1,44 +1,35 @@
-/*
- * 
- * 서버
- * 
- * TODO: 게임이 진행 중일 때는 다른 게임 선택 못하도록?
- * 
- * 
- */
-
 package socket;
 
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-
-
-
-
 public class Server implements Runnable {
     private final int MAX_USER = 2;
+    private DataInputStream[] in = new DataInputStream[2];
+    private DataOutputStream[] out = new DataOutputStream[2];
 
-    public DataOutputStream[] out = new DataOutputStream[2];
+    static GameManager gameManager = new GameManager();
 
-    @Override
-    public void run() {
+    public Server() {}
 
+    public void initServer() {
         try {
+            // server open
             ServerSocket serverSocket = new ServerSocket(5000);
-            System.out.println("서버 시작. 클라이언트 연결 대기 중...");
 
             int userNumber = 0;
             while (userNumber < MAX_USER) {
                 Socket socket = serverSocket.accept(); // 클라이언트 연결 수락
-                System.out.println("클라이언트 연결: " + userNumber);
 
-                // 클라이언트로부터 메시지 받아 게임에 대한 처리하는 쓰레드 생성 및 시작
-                GameManager gameManager = new GameManager(socket, userNumber, out);
-                gameManager.start();
+                in[userNumber] = new DataInputStream(socket.getInputStream());
+                out[userNumber] = new DataOutputStream(socket.getOutputStream());
                 
+                // 유저 번호 알려줌
+                out[userNumber].writeInt(userNumber);
+
                 userNumber++;
             }
         } catch (IOException e) {
@@ -46,5 +37,57 @@ public class Server implements Runnable {
         }
     }
 
+    // 클라이언트로 메시지를 전송하는 메소드
+    private void sendMessage(String message) {
+        try {
+            System.out.println("SER >>> " + message);
+            out[0].writeUTF(message);
+            out[0].flush();
+            out[1].writeUTF(message);
+            out[1].flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    // 클라이언트에게 메시지를 받아 응답 보내는 쓰레드를 위한 클래스
+    class GetMessage implements Runnable {
+        int userNumber;
 
+        public GetMessage(int userNumber) {
+            this.userNumber = userNumber;
+        } 
+
+        @Override
+        public void run() {
+            try {
+                while (true) {
+                    String message = in[userNumber].readUTF(); // 클라이언트로부터 메시지 수신
+                    
+                    if (message != null) {
+                        System.out.println("SER <<< " + message);
+                        String response = gameManager.handleReceivedMessage(message);
+
+                        if (response != null) {
+                            sendMessage(response);
+                        }
+                    }
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    @Override
+    public void run() {
+        initServer();
+
+        // 각 클라이언트에게 메시지 받아 응답 보내는 쓰레드 실행
+        Thread handleMessageFrom0Thread = new Thread(new GetMessage(0));
+        handleMessageFrom0Thread.start();
+        Thread handleMessageFrom1Thread = new Thread(new GetMessage(1));
+        handleMessageFrom1Thread.start();
+    }
 }
