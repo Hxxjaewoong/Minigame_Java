@@ -24,10 +24,12 @@ public class Game2 {
 	public static int[][] layer2 = new int[SIZE][SIZE];
 	public static int[] targetNumber = new int[2];
 	
-
-	public void initGame() {
+	public Game2() {
 		// add base numbers to list
         for (int i = 1; i <= SIZE*SIZE; i++) baseNumbers.add(i);
+	}
+
+	public void initGame() {
 
 		// init layer 1 (1 ~ 25)
 		Collections.shuffle(baseNumbers);

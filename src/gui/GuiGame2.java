@@ -1,3 +1,14 @@
+/*
+ * 
+ * 두 유저가 동시에 시작하도록 해야 함
+ * 동시에 시작 못하는 이유: 타일 버튼을 생성하는데 시간 차이 존재
+ * solution: 타일 생성 후 server에게 ready 신호 보냄
+ * 			 두 클라이언트가 모두 ready 신호 보내면 서버는 다시 클라이언트에게 ready 보냄
+ * 			 클라이언트가 ready 받으면 카운트 시작
+ * 
+ */
+
+
 package gui;
 
 import javax.swing.*;
@@ -77,7 +88,21 @@ public class GuiGame2 extends Game2 implements GamePanel {
 		}
 	}
 
-	
+	// 3초 기다린 후에 시작
+	void wait3Sec() {
+		try {
+			infoText.setText("The game is about to start");
+			Thread.sleep(1000);
+			infoText.setText("3");
+			Thread.sleep(1000);
+			infoText.setText("2");
+			Thread.sleep(1000);
+			infoText.setText("1");
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
 		
 	// 결과 메시지를 파싱해서 결과 처리
 	public void parseReceivedMessage(String message) {
@@ -87,11 +112,11 @@ public class GuiGame2 extends Game2 implements GamePanel {
 		// 게임 시작. 서버에게서 받은 숫자로 타일 초기화
 		if (parsedMessage[0].equals("start")) {
 			initButtons(parsedMessage);
-			infoText.setText("Game start! Target: 1");
 
+			wait3Sec();
 			playing = true;
+			infoText.setText("Game start! Target: 1");
 		}
-
 
 
 		int user = Integer.parseInt(parsedMessage[1]);
@@ -124,8 +149,7 @@ public class GuiGame2 extends Game2 implements GamePanel {
 			if (nextTarget-1 > SIZE*SIZE) {
 				buttons[r][c].setText("");
 				buttons[r][c].setBackground(Color.black);
-			}
-			else {
+			} else {
 				buttons[r][c].setText(String.valueOf(nextLayer));
 			}
 
@@ -139,12 +163,7 @@ public class GuiGame2 extends Game2 implements GamePanel {
 		if (parsedMessage[0].equals("notTarget")) {
 			return;
 		}
-
-
-
 	}
-	
-
 	
 	
     private class ButtonClickListener implements ActionListener {
@@ -163,7 +182,6 @@ public class GuiGame2 extends Game2 implements GamePanel {
 			
 			// 서버에게 행동 메시지 전송
 			client.sendMessage("click " + client.userNumber + " " + r + " " + c ); // "click 0 1 2"
-
 		}
     }
 }
