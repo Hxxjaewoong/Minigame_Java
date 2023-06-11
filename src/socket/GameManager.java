@@ -24,6 +24,9 @@ public class GameManager {
 
     public static int playingNumber; // 어떤 게임을 플레이하고 있는지
     public static int[] choice = new int[2];
+    public static int[] scores = new int[2]; // 두 유저의 점수 기록. 필요하지 않을 수 있음
+
+    private static final int MIN = -9999; // 임의의 최소 점수
     
     public GameManager() {
 
@@ -78,6 +81,9 @@ public class GameManager {
                         initString = String.valueOf(rd.nextInt(2));
                         break;
                     case 4:
+                        // 점수 초기화
+                        scores[0] = MIN;
+                        scores[1] = MIN;
                         break;
                     case 5:
                         break;
@@ -99,8 +105,8 @@ public class GameManager {
                 return handleGame2(message);
             case 3:
                 return handleGame3(message);
-            // case 4:
-            //     return handleGame4(message);
+            case 4:
+                return handleGame4(message);
             // case 5:
             //     return handleGame5(message);
             default:
@@ -110,17 +116,16 @@ public class GameManager {
 
 
 
-    
     // game1의 행동 처리
-    public String handleGame1(String message) {
-        String[] parsed = message.split(" ");
+    private String handleGame1(String message) {
+        String[] parsedMessage = message.split(" ");
 
         // "click [user] [r] [c]"
         // user가 (r,c)를 클릭함
-        if (parsed[0].equals("click")) {
-            int user = Integer.parseInt(parsed[1]);
-            int r = Integer.parseInt(parsed[2]);
-            int c = Integer.parseInt(parsed[3]);
+        if (parsedMessage[0].equals("click")) {
+            int user = Integer.parseInt(parsedMessage[1]);
+            int r = Integer.parseInt(parsedMessage[2]);
+            int c = Integer.parseInt(parsedMessage[3]);
             int result = game1.isTarget(r, c);
 
             if (result == -1) {
@@ -142,14 +147,14 @@ public class GameManager {
     }
 
     // game2의 행동 처리
-    public String handleGame2(String message) {
-        String[] parsed = message.split(" ");
+    private String handleGame2(String message) {
+        String[] parsedMessage = message.split(" ");
         // "click [user] [r] [c]"
         // user가 (r,c)를 클릭함
-        if (parsed[0].equals("click")) {
-            int user = Integer.parseInt(parsed[1]);
-            int r = Integer.parseInt(parsed[2]);
-            int c = Integer.parseInt(parsed[3]);
+        if (parsedMessage[0].equals("click")) {
+            int user = Integer.parseInt(parsedMessage[1]);
+            int r = Integer.parseInt(parsedMessage[2]);
+            int c = Integer.parseInt(parsedMessage[3]);
 
 			if (game2.isTargetNumber(r, c, user)) {
                 int nextTarget = Game2.targetNumber[user];
@@ -170,7 +175,7 @@ public class GameManager {
 
 
     // game3의 행동 처리
-    public String handleGame3(String message) {
+    private String handleGame3(String message) {
         String[] parsedMessage = message.split(" ");
 
         // "open [user]"
@@ -219,6 +224,29 @@ public class GameManager {
         return null;
     }
 
+        
+    private String handleGame4(String message) {
+        String[] parsedMessage = message.split(" ");
+
+        // "finish [user] [score]"
+        // 게임 종료 유저의 스코어 기록
+        if (parsedMessage[0].equals("finish")) {
+            int user = Integer.parseInt(parsedMessage[1]);
+            int score = Integer.parseInt(parsedMessage[2]);
+
+            scores[user] = score;
+
+            if (scores[0] == MIN || scores[1] == MIN) {
+                return null;
+            }
+            
+            int winner = scores[0] == scores[1] ? -1 : (scores[0] > scores[1] ? 0 : 1);
+
+            return "finish " + winner;
+        }
+        
+        return null;
+    }
 
 
     /*
