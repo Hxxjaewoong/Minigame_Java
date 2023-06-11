@@ -2,7 +2,6 @@ package gui;
 
 import javax.swing.*;
 
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -23,10 +22,6 @@ public class GuiGame1 extends Game1 implements GamePanel {
     public static JButton buttons[][] = new JButton[MAP_SIZE][MAP_SIZE];
 	public JTextArea infoText;
 	
-	private Color HIDE_COLOR = Color.gray;
-	private Color TARGET_COLOR = Color.yellow;
-	private Color EMPTY_COLOR = Color.darkGray;
-
 	public GuiGame1(Client client) {
 		this.client = client;
 
@@ -35,10 +30,12 @@ public class GuiGame1 extends Game1 implements GamePanel {
 
 		panelInfo = new JPanel();
 		panelInfo.setPreferredSize(gameInfoArea);
-		panelInfo.setBackground(Color.yellow);
+		panelInfo.setOpaque(false);
 
 		infoText = new JTextArea("상대방 대기 중...");
 		infoText.setFont(infoFont);
+		infoText.setOpaque(false);
+		infoText.setForeground(Color.black);
 		panelInfo.add(infoText);
 
 
@@ -52,8 +49,8 @@ public class GuiGame1 extends Game1 implements GamePanel {
         		JButton button = new JButton();
         		
         		// 버튼 디자인 및 위치
-        		button.setBackground(HIDE_COLOR);
-        		button.setBorder(BorderFactory.createLineBorder(Color.black, 2));
+        		button.setBackground(Color.white);
+        		button.setBorder(BorderFactory.createLineBorder(Color.white, 2));
 				button.setFont(game1ButtonFont);
         
                 // 버튼 클릭 이벤트
@@ -76,8 +73,8 @@ public class GuiGame1 extends Game1 implements GamePanel {
 	public void initButtons() {
 		for (int r = 0; r < MAP_SIZE; r++) {
         	for (int c = 0; c < MAP_SIZE; c++) {
-        		buttons[r][c].setBackground(HIDE_COLOR);
-				buttons[r][c].setText("???");
+        		buttons[r][c].setBackground(new Color(204, 204, 68));
+				buttons[r][c].setText("");
         	}
         }
 	}
@@ -102,7 +99,7 @@ public class GuiGame1 extends Game1 implements GamePanel {
 				myTurn = false;
 				infoText.setText("Game start\nOpponent's Turn");
 			}
-
+		    
 			playing = true;
 
 			return;
@@ -113,7 +110,7 @@ public class GuiGame1 extends Game1 implements GamePanel {
 		// "alreadyOpen [user]"
 		// 이미 열린 버튼. 아무 행동 안 함
 		if (parsedMessage[0].equals("alreadyOpen")) {
-			int userNumber = Integer.parseInt(parsedMessage[1]);
+				int userNumber = Integer.parseInt(parsedMessage[1]);
 			if (client.userNumber == userNumber) {
 				infoText.setText("이미 열린 버튼입니다.");
 			}
@@ -130,7 +127,19 @@ public class GuiGame1 extends Game1 implements GamePanel {
 			int user1score = Integer.parseInt(parsedMessage[4]);
 
 			buttons[r][c].setText("");
-			buttons[r][c].setBackground(TARGET_COLOR);
+			buttons[r][c].setBackground(Color.lightGray);ImageIcon imageIcon = new ImageIcon("image/treasure2.png");
+		    // 이미지 크기 조정
+		    Image image = imageIcon.getImage();
+		    Image scaledImage = image.getScaledInstance(buttons[r][c].getWidth(), buttons[r][c].getHeight(), Image.SCALE_SMOOTH);
+		    // 크기 조정된 이미지 아이콘 생성
+		    ImageIcon scaledIcon = new ImageIcon(scaledImage);
+
+		    // 이미지를 버튼의 가운데에 정렬하기 위해 버튼의 텍스트 정렬을 수정
+		    buttons[r][c].setHorizontalTextPosition(SwingConstants.CENTER);
+		    buttons[r][c].setVerticalTextPosition(SwingConstants.CENTER);
+
+		    buttons[r][c].setIcon(scaledIcon);
+		    buttons[r][c].setBackground(Color.white);
 
 			infoText.setText(r+"행 "+c+"열 클릭! 마지막 보물 발견!\n");
 			// 경우의 수에 따라 메시지 변경
@@ -157,9 +166,21 @@ public class GuiGame1 extends Game1 implements GamePanel {
 		if (parsedMessage[0].equals("target")) {
 			int foundCount = Integer.parseInt(parsedMessage[3]);
 			infoText.setText(r+"행 "+c+"열 클릭! " + foundCount + "번째 보물 발견!");
-			buttons[r][c].setText("");
-			buttons[r][c].setBackground(TARGET_COLOR);
-			myTurn = !myTurn; // 턴 변경
+			
+			ImageIcon imageIcon = new ImageIcon("image/treasure2.png");
+		    // 이미지 크기 조정
+		    Image image = imageIcon.getImage();
+		    Image scaledImage = image.getScaledInstance(buttons[r][c].getWidth(), buttons[r][c].getHeight(), Image.SCALE_SMOOTH);
+		    // 크기 조정된 이미지 아이콘 생성
+		    ImageIcon scaledIcon = new ImageIcon(scaledImage);
+
+		    // 이미지를 버튼의 가운데에 정렬하기 위해 버튼의 텍스트 정렬을 수정
+		    buttons[r][c].setHorizontalTextPosition(SwingConstants.CENTER);
+		    buttons[r][c].setVerticalTextPosition(SwingConstants.CENTER);
+
+		    buttons[r][c].setIcon(scaledIcon);
+		    buttons[r][c].setBackground(Color.white);
+		    myTurn = !myTurn; // 턴 변경
 			return;
 		}
 
@@ -168,8 +189,19 @@ public class GuiGame1 extends Game1 implements GamePanel {
 		if (parsedMessage[0].equals("empty")) {
 			int distance = Integer.parseInt(parsedMessage[3]);
 			infoText.setText(r+"행 "+c+"열 클릭! " + "가장 가까운 보물과의 거리 = " + distance);
-			buttons[r][c].setText("");
-			buttons[r][c].setBackground(EMPTY_COLOR);
+			ImageIcon imageIcon = new ImageIcon("image/Kkwang.png");
+		    // 이미지 크기 조정
+		    Image image = imageIcon.getImage();
+		    Image scaledImage = image.getScaledInstance(buttons[r][c].getWidth(), buttons[r][c].getHeight(), Image.SCALE_SMOOTH);
+		    // 크기 조정된 이미지 아이콘 생성
+		    ImageIcon scaledIcon = new ImageIcon(scaledImage);
+
+		    // 이미지를 버튼의 가운데에 정렬하기 위해 버튼의 텍스트 정렬을 수정
+		    buttons[r][c].setHorizontalTextPosition(SwingConstants.CENTER);
+		    buttons[r][c].setVerticalTextPosition(SwingConstants.CENTER);
+
+		    buttons[r][c].setIcon(scaledIcon);
+		    buttons[r][c].setBackground(Color.white);
 			myTurn = !myTurn; // 턴 변경
 			return;
 		}
@@ -200,7 +232,7 @@ public class GuiGame1 extends Game1 implements GamePanel {
 			
 			// 서버에게 행동 메시지 전송
 			client.sendMessage("click " + client.userNumber + " " + r + " " + c ); // "click 0 1 2"
-
+			
 		}
     }
 }

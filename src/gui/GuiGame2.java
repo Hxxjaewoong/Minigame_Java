@@ -1,14 +1,3 @@
-/*
- * 
- * 두 유저가 동시에 시작하도록 해야 함
- * 동시에 시작 못하는 이유: 타일 버튼을 생성하는데 시간 차이 존재
- * solution: 타일 생성 후 server에게 ready 신호 보냄
- * 			 두 클라이언트가 모두 ready 신호 보내면 서버는 다시 클라이언트에게 ready 보냄
- * 			 클라이언트가 ready 받으면 카운트 시작
- * 
- */
-
-
 package gui;
 
 import javax.swing.*;
@@ -41,15 +30,17 @@ public class GuiGame2 extends Game2 implements GamePanel {
 
 		panelInfo = new JPanel();
 		panelInfo.setPreferredSize(gameInfoArea);
-		panelInfo.setBackground(Color.yellow);
+		panelInfo.setOpaque(false);
 
 		infoText = new JTextArea("상대방 대기 중...");
 		infoText.setFont(infoFont);
+		infoText.setOpaque(false);
+		infoText.setForeground(Color.black);
 		panelInfo.add(infoText);
 
         panelPlay = new JPanel();
         panelPlay.setPreferredSize(gamePlayArea);
-        panelPlay.setBackground(Color.gray);
+        panelPlay.setBackground(Color.white);
         panelPlay.setLayout(new GridLayout(SIZE, SIZE, 5, 5));
         
         
@@ -58,8 +49,8 @@ public class GuiGame2 extends Game2 implements GamePanel {
 				JButton button = new JButton();
         		
         		// 버튼 디자인 및 위치
-        		button.setBackground(Color.pink);
-        		button.setBorder(BorderFactory.createLineBorder(Color.red, 2));
+        		button.setBackground(new Color(158, 255, 169));
+        		button.setBorder(BorderFactory.createLineBorder(new Color(158, 255, 169), 2));
 				button.setFont(game2ButtonFont);
         		
                 // event on button
@@ -82,7 +73,7 @@ public class GuiGame2 extends Game2 implements GamePanel {
 	public void initButtons(String[] parsed) {
 		for (int r = 0; r < SIZE; r++) {
 			for (int c = 0; c < SIZE; c++) {
-				buttons[r][c].setBackground(Color.pink);
+				buttons[r][c].setBackground(new Color(158, 255, 169));
 				buttons[r][c].setText(parsed[r*SIZE + c + 2]);
 			}
 		}
@@ -102,7 +93,7 @@ public class GuiGame2 extends Game2 implements GamePanel {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-	}
+	}	
 		
 	// 결과 메시지를 파싱해서 결과 처리
 	public void parseReceivedMessage(String message) {
@@ -165,7 +156,7 @@ public class GuiGame2 extends Game2 implements GamePanel {
 		}
 	}
 	
-	
+
     private class ButtonClickListener implements ActionListener {
     	
 		@Override

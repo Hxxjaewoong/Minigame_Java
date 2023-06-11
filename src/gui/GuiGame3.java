@@ -48,14 +48,17 @@ public class GuiGame3 extends Game3 implements GamePanel {
 
 		panelInfo = new JPanel();
 		panelInfo.setPreferredSize(gameInfoArea);
-		panelInfo.setBackground(Color.yellow);
+		panelInfo.setOpaque(false);
 
 		infoText = new JTextArea("상대방 대기 중...");
+		infoText.setFont(infoFont);
+		infoText.setOpaque(false);
+		infoText.setForeground(Color.black);
 		panelInfo.add(infoText);
-
+		
         panelPlay = new JPanel();
         panelPlay.setPreferredSize(gamePlayArea);
-        panelPlay.setBackground(Color.gray);
+        panelPlay.setBackground(new Color(255, 237, 219));
 
         
 		// initialize image icons
@@ -150,7 +153,7 @@ public class GuiGame3 extends Game3 implements GamePanel {
 	}
 
 
-
+	
 	// 결과 메시지를 파싱해서 결과 처리
 	public void parseReceivedMessage(String message) {
 		String[] parsedMessage = message.split(" ");
@@ -189,13 +192,13 @@ public class GuiGame3 extends Game3 implements GamePanel {
 				if (behave.equals("bell")) {
 					opponentCardCount.setText(String.valueOf(opponentCount+1));
 				}
-				infoText.setText("패배!");
+				infoText.setText("You lose...");
 			} else {
 				if (behave.equals("bell")) {
 					myCardCount.setText(String.valueOf(myCount+1));
 				}
 				opponentCardCount.setText(String.valueOf(opponentCount-1));
-				infoText.setText("승리!");
+				infoText.setText("We got this !!");
 			}
 
 			playing = false;
@@ -221,7 +224,6 @@ public class GuiGame3 extends Game3 implements GamePanel {
 			
 			if (client.userNumber == user) infoText.setText("내가 카드 오픈!");
 			else infoText.setText("상대가 카드 오픈!");
-
 			myTurn = !myTurn;
 			return;
 		}
@@ -230,16 +232,18 @@ public class GuiGame3 extends Game3 implements GamePanel {
 		// "success [user] [stackCardCount of user]"
 		// 종 누르기 성공. 스택의 카드 개수 수정
 		if (parsedMessage[0].equals("success")) {
-			clearOnBoardCard();
+			clearBoard();
+			myCardLabel.setIcon(null);
+			opponentCardLabel.setIcon(null);
 
 			int user = Integer.parseInt(parsedMessage[1]);
 			int count = Integer.parseInt(parsedMessage[2]);
 			if (user == client.userNumber) {
 				myCardCount.setText(String.valueOf(count));
-				infoText.setText("내가 카드 획득!");
+				infoText.setText("You got these cards!");
 			} else {
 				opponentCardCount.setText(String.valueOf(count));
-				infoText.setText("상대가 카드 획득...");
+				infoText.setText("Opponent pressed faster!");
 			}
 
 			return;
@@ -254,16 +258,22 @@ public class GuiGame3 extends Game3 implements GamePanel {
 			if (user == client.userNumber) {
 				myCardCount.setText(String.valueOf(myCount-1));
 				opponentCardCount.setText(String.valueOf(opponentCount+1));
-				infoText.setText("당신의 실수!");
+				infoText.setText("Opponent pressed faster!");
 			} else {
 				myCardCount.setText(String.valueOf(myCount+1));
 				opponentCardCount.setText(String.valueOf(opponentCount-1));
-				infoText.setText("상대의 실수!");
+				infoText.setText("You got these cards!");
 			}
 
 			return;
 		}
 	}
+
+
+
+
+
+
 
 
 	
