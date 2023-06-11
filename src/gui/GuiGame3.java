@@ -58,7 +58,7 @@ public class GuiGame3 extends Game3 implements GamePanel {
 		
         panelPlay = new JPanel();
         panelPlay.setPreferredSize(gamePlayArea);
-        panelPlay.setBackground(new Color(255, 237, 219));
+        panelPlay.setBackground(new Color(255, 244, 226));
 
         
 		// initialize image icons

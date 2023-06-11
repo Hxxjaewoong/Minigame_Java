@@ -49,8 +49,8 @@ public class GuiGame2 extends Game2 implements GamePanel {
 				JButton button = new JButton();
         		
         		// 버튼 디자인 및 위치
-        		button.setBackground(new Color(158, 255, 169));
-        		button.setBorder(BorderFactory.createLineBorder(new Color(158, 255, 169), 2));
+        		button.setBackground(new Color(196, 254, 213));
+        		button.setBorder(BorderFactory.createLineBorder(new Color(196, 254, 213), 2));
 				button.setFont(game2ButtonFont);
         		
                 // event on button
@@ -73,7 +73,7 @@ public class GuiGame2 extends Game2 implements GamePanel {
 	public void initButtons(String[] parsed) {
 		for (int r = 0; r < SIZE; r++) {
 			for (int c = 0; c < SIZE; c++) {
-				buttons[r][c].setBackground(new Color(158, 255, 169));
+				buttons[r][c].setBackground(new Color(196, 254, 213));
 				buttons[r][c].setText(parsed[r*SIZE + c + 2]);
 			}
 		}

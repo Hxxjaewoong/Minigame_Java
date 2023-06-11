@@ -1,4 +1,4 @@
-import java.awt.*;
+ import java.awt.*;
 import javax.swing.*;
 import java.io.IOException;
 
@@ -18,7 +18,7 @@ public class Gamerunner {
 		
 		start = new Start();
 		logInFrame.getContentPane().add(start, BorderLayout.NORTH);
-		ImageIcon icon = new ImageIcon("game.jpg"); //아직 이미지 추가하지 않았음
+		ImageIcon icon = new ImageIcon("image/gameMain.png");
         Image img = icon.getImage();
 
         JPanel imagePanel = new JPanel() {

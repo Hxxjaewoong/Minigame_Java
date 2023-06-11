@@ -22,7 +22,7 @@ public class GuiGame4 extends Game4 implements GamePanel{
 	boolean playing;
 
 	public JPanel panel;
-	public JPanel panelInfo;
+	//public JPanel panelInfo;
     public JPanel panelPlay;
 	public JTextArea infoText;
 	public JLabel scoreLabel;
@@ -47,29 +47,37 @@ public class GuiGame4 extends Game4 implements GamePanel{
 		panel.setBounds(gameArea);
 		panel.setFocusable(true); // 패널에 포커스를 설정
 
-		panelInfo = new JPanel();
-		panelInfo.setPreferredSize(gameInfoArea);
-		panelInfo.setBackground(Color.yellow);
+//		panelInfo = new JPanel();
+//		panelInfo.setPreferredSize(gameInfoArea);
+//		panelInfo.setBackground(Color.yellow);
 
 		scoreLabel = new JLabel("Score: 0");
         scoreLabel.setHorizontalAlignment(JLabel.CENTER); // 가운데 정렬
         
+        // 폰트 크기 조정
+        scoreLabel.setFont(scoreLabel.getFont().deriveFont(20f));
+
+        // 크기 조정
+        Dimension scoreLabelSize = new Dimension(200, 50);
+        scoreLabel.setPreferredSize(scoreLabelSize);
+        
 		infoText = new JTextArea("Contains info of game4");
-		panelInfo.add(infoText);
+//		panelInfo.add(infoText);
 
         panelPlay = new JPanel();
         panelPlay.setPreferredSize(new Dimension(460, 430));
-        panelPlay.setBackground(Color.white);
+        panelPlay.setBackground(new Color(238, 238, 238));
         panelPlay.setLayout(new GridLayout(2,1,	 10, 10));
         
         
         TextQ = new JTextArea("\n        It will start soon");
         TextQ.setEditable(false);
         TextQ.setFont(TextQ.getFont().deriveFont(40f)); // 원하는 폰트 크기로 설정
+        TextQ.setBackground(new Color(238, 238, 238));
         
         keyboardArea = new JPanel();
         //keyboardArea.setPreferredSize(new Dimension(230, 280));
-        keyboardArea.setBackground(Color.white);
+        keyboardArea.setBackground(new Color(238, 238, 238));
         keyboardArea.setLayout(new GridLayout(2, 3, 10, 10));
 
 
@@ -79,10 +87,10 @@ public class GuiGame4 extends Game4 implements GamePanel{
     	leftButton = new JButton("◂");
         rightButton = new JButton("▸");
 		
-        upButton.setBackground(Color.white);
-        downButton.setBackground(Color.white);
-        leftButton.setBackground(Color.white);
-        rightButton.setBackground(Color.white);	
+        upButton.setBackground(new Color(228, 241, 195));
+        downButton.setBackground(new Color(228, 241, 195));
+        leftButton.setBackground(new Color(228, 241, 195));
+        rightButton.setBackground(new Color(228, 241, 195));	
 
 		upButton.setActionCommand("up");
 		downButton.setActionCommand("down");
@@ -108,7 +116,7 @@ public class GuiGame4 extends Game4 implements GamePanel{
         keyboardArea.add(downButton);
         keyboardArea.add(rightButton);
         
-        panel.add(panelInfo);
+//        panel.add(panelInfo);
         panel.add(scoreLabel); // 점수 레이블 추가
 		panel.add(panelPlay);
 		panelPlay.add(TextQ);

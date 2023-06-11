@@ -41,7 +41,7 @@ public class GuiGame1 extends Game1 implements GamePanel {
 
         panelPlay = new JPanel();
         panelPlay.setPreferredSize(gamePlayArea);
-        panelPlay.setBackground(Color.white);
+        panelPlay.setBackground(new Color(238, 238, 238));
         panelPlay.setLayout(new GridLayout(MAP_SIZE, MAP_SIZE, 5, 5));
         
 		for (int r = 0; r < MAP_SIZE; r++) {
@@ -49,8 +49,8 @@ public class GuiGame1 extends Game1 implements GamePanel {
         		JButton button = new JButton();
         		
         		// 버튼 디자인 및 위치
-        		button.setBackground(Color.white);
-        		button.setBorder(BorderFactory.createLineBorder(Color.white, 2));
+        		button.setBackground(new Color(238, 238, 238));
+        		button.setBorder(BorderFactory.createLineBorder(new Color(238, 238, 238), 2));
 				button.setFont(game1ButtonFont);
         
                 // 버튼 클릭 이벤트
@@ -73,7 +73,7 @@ public class GuiGame1 extends Game1 implements GamePanel {
 	public void initButtons() {
 		for (int r = 0; r < MAP_SIZE; r++) {
         	for (int c = 0; c < MAP_SIZE; c++) {
-        		buttons[r][c].setBackground(new Color(204, 204, 68));
+        		buttons[r][c].setBackground(new Color(228, 225, 144));
 				buttons[r][c].setText("");
         	}
         }

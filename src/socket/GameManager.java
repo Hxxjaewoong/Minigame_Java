@@ -12,9 +12,6 @@ import games.Game4;
 public class GameManager {
     Random rd = new Random();
 
-    // static으로 선언해야 멀티쓰레드에서도 같은 게임을 다루게 됨
-    // 두 유저가 같은 조건일 필요 없으면 굳이 아니어도 됨
-    // 서버가 주체가 되지 않아도 되는 게임은 여기서 필요 없음 (e.g. 먼저 끝나면 이기는 게임)
     public static Game1 game1;
     public static Game2 game2;
     public static Game3 game3;

@@ -118,7 +118,9 @@ class mainGui extends JFrame {
         
         startButton = new JButton();
         startButton.setPreferredSize(new Dimension(100, 30));
-        startButton.setIcon(new ImageIcon("image/start.png"));
+        ImageIcon startIcon = new ImageIcon("image/start.png");
+        Image startImage = startIcon.getImage().getScaledInstance(100, 30, Image.SCALE_SMOOTH);
+        startButton.setIcon(new ImageIcon(startImage));
         startButton.setContentAreaFilled(false); // 버튼 배경 투명 설정
         startButton.setBorderPainted(false); // 버튼 테두리 제거
         startButton.setFocusPainted(false); // 버튼 선택 시 포커스 표시 제거
@@ -127,7 +129,9 @@ class mainGui extends JFrame {
 
         exitButton = new JButton();
         exitButton.setPreferredSize(new Dimension(60, 30));
-        exitButton.setIcon(new ImageIcon("image/exit.png"));
+        ImageIcon exitIcon = new ImageIcon("image/exit.png");
+        Image exitImage = exitIcon.getImage().getScaledInstance(60, 30, Image.SCALE_SMOOTH);
+        exitButton.setIcon(new ImageIcon(exitImage));
         exitButton.setContentAreaFilled(false); // 버튼 배경 투명 설정
         exitButton.setBorderPainted(false); // 버튼 테두리 제거
         exitButton.setFocusPainted(false); // 버튼 선택 시 포커스 표시 제거
