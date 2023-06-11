@@ -6,7 +6,6 @@ import games.Game1;
 import games.Game2;
 import games.Game3;
 import games.Game4;
-import games.Game5;
 
 
 
@@ -20,7 +19,6 @@ public class GameManager {
     public static Game2 game2;
     public static Game3 game3;
     public static Game4 game4;
-    public static Game5 game5;
 
     public static int playingNumber; // 어떤 게임을 플레이하고 있는지
     public static int[] choice = new int[2];
@@ -34,7 +32,6 @@ public class GameManager {
         game2 = new Game2();
         game3 = new Game3();
         game4 = new Game4();
-        game5 = new Game5();
         
         playingNumber = 0;
         choice[0] = 0;
@@ -247,11 +244,5 @@ public class GameManager {
         
         return null;
     }
-
-
-    /*
-     * 나머지 게임에 대해서도 처리하는 함수 만들어야 함
-     */
-
 
 }
