@@ -7,7 +7,7 @@ import socket.Server;
 
 public class Gamerunner {
 
-	public static Start start;
+	public static LogIn logIn;
 	public static Server server;
 	public static Client client;
 
@@ -16,8 +16,8 @@ public class Gamerunner {
 		logInFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		logInFrame.setLayout(new BorderLayout());
 		
-		start = new Start();
-		logInFrame.getContentPane().add(start, BorderLayout.NORTH);
+		logIn = new LogIn();
+		logInFrame.getContentPane().add(logIn, BorderLayout.NORTH);
 		ImageIcon icon = new ImageIcon("image/gameMain.png");
         Image img = icon.getImage();
 
@@ -28,22 +28,22 @@ public class Gamerunner {
             }
         };
         
-        logInFrame.getContentPane().add(new Start(),BorderLayout.NORTH);
+        logInFrame.getContentPane().add(new LogIn(),BorderLayout.NORTH);
         logInFrame.getContentPane().add(imagePanel, BorderLayout.CENTER);
         logInFrame.setSize(500,500);
 		logInFrame.setVisible(true);	
 
 		// start button을 누를 때까지 spin
-		while (start.getIp() == null) {;}
+		while (logIn.getIp() == null) {;}
 		
 		// 1P면 서버도 열어야 함
-		if (start.getSer()) {
+		if (logIn.getSer()) {
 			Server server = new Server();
 			Thread serverThread = new Thread (server);
 			serverThread.start();
 		}
 
-		Client client = new Client(start.getIp());
+		Client client = new Client(logIn.getIp());
 		Thread clientThread = new Thread (client);
 		clientThread.start();
 
