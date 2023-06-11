@@ -3,6 +3,7 @@ import java.awt.Color;
 
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -30,13 +31,13 @@ public class GuiGame4 extends Game4 implements GamePanel{
     public int count = 3; //시작 전 3초 세고 시작함
     public int countGame = 1;
     
-	JTextArea TextQ;
 	JPanel keyboardArea;
 	JButton upButton;
 	JButton downButton;
 	JButton leftButton;
 	JButton rightButton;
 
+	JLabel mentLabel;
 
 	public String keyPressed;
     
@@ -45,11 +46,6 @@ public class GuiGame4 extends Game4 implements GamePanel{
 
 		panel = new JPanel();
 		panel.setBounds(gameArea);
-		panel.setFocusable(true); // 패널에 포커스를 설정
-
-//		panelInfo = new JPanel();
-//		panelInfo.setPreferredSize(gameInfoArea);
-//		panelInfo.setBackground(Color.yellow);
 
 		scoreLabel = new JLabel("Score: 0");
         scoreLabel.setHorizontalAlignment(JLabel.CENTER); // 가운데 정렬
@@ -60,23 +56,19 @@ public class GuiGame4 extends Game4 implements GamePanel{
         // 크기 조정
         Dimension scoreLabelSize = new Dimension(200, 50);
         scoreLabel.setPreferredSize(scoreLabelSize);
-        
-		infoText = new JTextArea("Contains info of game4");
-//		panelInfo.add(infoText);
 
         panelPlay = new JPanel();
         panelPlay.setPreferredSize(new Dimension(460, 430));
         panelPlay.setBackground(new Color(238, 238, 238));
         panelPlay.setLayout(new GridLayout(2,1,	 10, 10));
         
-        
-        TextQ = new JTextArea("\n        It will start soon");
-        TextQ.setEditable(false);
-        TextQ.setFont(TextQ.getFont().deriveFont(40f)); // 원하는 폰트 크기로 설정
-        TextQ.setBackground(new Color(238, 238, 238));
+		//곧시작 멘트 이미지 띄우기
+        ImageIcon mentImage = new ImageIcon("image/game4Start.jpg");
+        Image image = mentImage.getImage().getScaledInstance(460, 230, Image.SCALE_SMOOTH);
+        mentImage = new ImageIcon(image);
+        mentLabel = new JLabel(mentImage);
         
         keyboardArea = new JPanel();
-        //keyboardArea.setPreferredSize(new Dimension(230, 280));
         keyboardArea.setBackground(new Color(238, 238, 238));
         keyboardArea.setLayout(new GridLayout(2, 3, 10, 10));
 
@@ -116,26 +108,30 @@ public class GuiGame4 extends Game4 implements GamePanel{
         keyboardArea.add(downButton);
         keyboardArea.add(rightButton);
         
-//        panel.add(panelInfo);
         panel.add(scoreLabel); // 점수 레이블 추가
 		panel.add(panelPlay);
-		panelPlay.add(TextQ);
+		panelPlay.add(mentLabel);
 		panelPlay.add(keyboardArea);
 		
     }
 	
 
-	private class QueryChange extends Thread  {
+	private class QueryChange extends Thread {
 		Random random = new Random();
         	
 		@Override
 		public void run() {
+			if (!playing) return;
+
 			int randomInt;
 			keyPressed = "";
 
 			for(int i = 1; i <= 20; ++i) {
 				randomInt = random.nextInt(12);
-				TextQ.setText(MENT[randomInt]);
+				final ImageIcon mentImage = new ImageIcon("image/dir" + Integer.toString(randomInt+1) + ".jpg");
+				final Image image = mentImage.getImage().getScaledInstance(460, 230, Image.SCALE_SMOOTH);
+
+				mentLabel.setIcon(new ImageIcon(image));
 
 				try {
 					Thread.sleep(2000);
@@ -170,24 +166,34 @@ public class GuiGame4 extends Game4 implements GamePanel{
 		}
 	}
 
-	Timer readyTimer = new Timer();
-	TimerTask readyTimer1 = new TimerTask() {
-		public void run() {
-			if(count > 0) {
-				// 카운트다운 값 감소
-				TextQ.setText("                   "+ Integer.toString(count));
-				count--;// 레이블에 숫자 표시
-			}
-			else {
-				TextQ.setText("                  Go!"); // 카운트다운 종료 후 메시지 표시
-				readyTimer.cancel();
 
-				// 게임 시작
-				Thread queryChangeThread = new QueryChange();
-				queryChangeThread.start();
+	// 3초 기다린 후에 시작
+	private class Wait3Sec extends Thread {
+		@Override
+		public void run() {
+			try {
+				Thread.sleep(1000);
+				while (count > 0) {
+					// 카운트다운 값 감소
+					ImageIcon mentImage = new ImageIcon("image/count" + count + ".jpg");
+					Image image = mentImage.getImage().getScaledInstance(460, 230, Image.SCALE_SMOOTH);
+					mentImage = new ImageIcon(image);
+					mentLabel.setIcon(mentImage);
+					Thread.sleep(1000);
+					count--;// 레이블에 숫자 표시
+				}
+
+				//go 이미지 띄우기
+				ImageIcon mentImage = new ImageIcon("image/go.jpg");
+				Image image = mentImage.getImage().getScaledInstance(460, 230, Image.SCALE_SMOOTH);
+				mentImage = new ImageIcon(image);
+				mentLabel.setIcon(mentImage);
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
 			}
-		}
-	};
+		}	
+	}
 
 
 
@@ -209,26 +215,56 @@ public class GuiGame4 extends Game4 implements GamePanel{
 	public void parseReceivedMessage(String message) {
 		String[] parsedMessage = message.split(" ");
 
-		// "start [gameNumber] [numbers 1 ~ 25]"
-		// 서버에게서 정보 받을 수 있을 듯
+		// "start [gameNumber]"
+		// 게임 시작
 		if (parsedMessage[0].equals("start")) {
+			playing = false;
+			Thread wait3Sec = new Wait3Sec();
+			wait3Sec.start();
+			try {
+				wait3Sec.join();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			
 			playing = true;
-			readyTimer.schedule(readyTimer1, 3000, 1000);
+			// 게임 시작
+			Thread queryChangeThread = new QueryChange();
+			queryChangeThread.start();
 		}
 
 		
-		// "finish [winner]"
+		// "finish [score0] [score1]"
 		// 두 유저 모두 게임 종료. 점수와 승자 출력
 		if (parsedMessage[0].equals("finish")) {
-			int winner = Integer.parseInt(parsedMessage[1]);
+			int user0score = Integer.parseInt(parsedMessage[1]);
+			int user1score = Integer.parseInt(parsedMessage[2]);
+			int winner = user0score == user1score ? -1 : user0score > user1score ? 0 : 1;
+			
+			// 최종 점수 표시
+			if (client.userNumber == 0) {
+				scoreLabel.setText("나 " + user0score + " : " + user1score + " 상대");
+			} else {
+				scoreLabel.setText("나 " + user1score + " : " + user0score + " 상대");
+			}
 
+			// 승리 패배 표시
 			if (winner == -1) {
-				TextQ.setText("Final Score: "+score+"\nDraw!");
+				ImageIcon mentImage = new ImageIcon("image/DRAW.jpg");
+				Image image = mentImage.getImage().getScaledInstance(460, 230, Image.SCALE_SMOOTH);
+				mentImage = new ImageIcon(image);
+				mentLabel.setIcon(mentImage);
 			}
 			else if (winner == client.userNumber) {
-				TextQ.setText("Final Score: "+score+"\nWin!");
+				ImageIcon mentImage = new ImageIcon("image/WIN.jpg");
+				Image image = mentImage.getImage().getScaledInstance(460, 230, Image.SCALE_SMOOTH);
+				mentImage = new ImageIcon(image);
+				mentLabel.setIcon(mentImage);
 			} else {
-				TextQ.setText("Final Score: "+score+"\nLose...");
+				ImageIcon mentImage = new ImageIcon("image/LOSE.jpg");
+				Image image = mentImage.getImage().getScaledInstance(460, 230, Image.SCALE_SMOOTH);
+				mentImage = new ImageIcon(image);
+				mentLabel.setIcon(mentImage);
 			}
 
 			playing = false;

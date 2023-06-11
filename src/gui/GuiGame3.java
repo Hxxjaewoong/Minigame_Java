@@ -164,11 +164,11 @@ public class GuiGame3 extends Game3 implements GamePanel {
 			int firstUserNumber = Integer.parseInt(parsedMessage[2]);
 			if (firstUserNumber == client.userNumber) {
 				myTurn = true;
-				infoText.setText("Game start\nYour Turn");
+				infoText.setText("게임 시작! 당신의 차례입니다.");
 			}
 			else {
 				myTurn = false;
-				infoText.setText("Game start\nOpponent's Turn");
+				infoText.setText("게임 시작! 상대방의 차례입니다.");
 			}
 
 			myCardCount.setText(String.valueOf(TOTAL_CARDS / 2));
@@ -192,13 +192,13 @@ public class GuiGame3 extends Game3 implements GamePanel {
 				if (behave.equals("bell")) {
 					opponentCardCount.setText(String.valueOf(opponentCount+1));
 				}
-				infoText.setText("You lose...");
+				infoText.setText("게임 종료. 패배...");
 			} else {
 				if (behave.equals("bell")) {
 					myCardCount.setText(String.valueOf(myCount+1));
 				}
 				opponentCardCount.setText(String.valueOf(opponentCount-1));
-				infoText.setText("We got this !!");
+				infoText.setText("게임 종료. 승리!");
 			}
 
 			playing = false;
@@ -240,10 +240,10 @@ public class GuiGame3 extends Game3 implements GamePanel {
 			int count = Integer.parseInt(parsedMessage[2]);
 			if (user == client.userNumber) {
 				myCardCount.setText(String.valueOf(count));
-				infoText.setText("You got these cards!");
+				infoText.setText("카드 획득!");
 			} else {
 				opponentCardCount.setText(String.valueOf(count));
-				infoText.setText("Opponent pressed faster!");
+				infoText.setText("이런, 상대방이 더 빨랐네요...");
 			}
 
 			return;
@@ -258,11 +258,11 @@ public class GuiGame3 extends Game3 implements GamePanel {
 			if (user == client.userNumber) {
 				myCardCount.setText(String.valueOf(myCount-1));
 				opponentCardCount.setText(String.valueOf(opponentCount+1));
-				infoText.setText("Opponent pressed faster!");
+				infoText.setText("나의 실수! 카드를 한 장 잃습니다.");
 			} else {
 				myCardCount.setText(String.valueOf(myCount+1));
 				opponentCardCount.setText(String.valueOf(opponentCount-1));
-				infoText.setText("You got these cards!");
+				infoText.setText("상대방의 실수! 카드를 한 장 얻습니다.");
 			}
 
 			return;

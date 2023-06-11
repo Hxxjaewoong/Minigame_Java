@@ -6,7 +6,7 @@ import javax.swing.*;
 public class LogIn extends JPanel {
 	
 	public boolean started = false;
-    private static boolean ser;
+	private static boolean ser;
 	private JRadioButton r1;
 	private JRadioButton r2;
 

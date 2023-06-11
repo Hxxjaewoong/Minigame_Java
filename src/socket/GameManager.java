@@ -233,10 +233,8 @@ public class GameManager {
             if (scores[0] == MIN || scores[1] == MIN) {
                 return null;
             }
-            
-            int winner = scores[0] == scores[1] ? -1 : (scores[0] > scores[1] ? 0 : 1);
 
-            return "finish " + winner;
+            return "finish " + scores[0] + " " + scores[1];
         }
         
         return null;

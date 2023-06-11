@@ -93,11 +93,11 @@ public class GuiGame1 extends Game1 implements GamePanel {
 			int firstUserNumber = Integer.parseInt(parsedMessage[2]);
 			if (firstUserNumber == client.userNumber) {
 				myTurn = true;
-				infoText.setText("Game start\nYour Turn");
+				infoText.setText("게임 시작! 당신의 차례입니다.");
 			}
 			else {
 				myTurn = false;
-				infoText.setText("Game start\nOpponent's Turn");
+				infoText.setText("게임 시작! 상대방의 차례입니다.");
 			}
 		    
 			playing = true;
@@ -145,15 +145,15 @@ public class GuiGame1 extends Game1 implements GamePanel {
 			// 경우의 수에 따라 메시지 변경
 			if (client.userNumber == 0) {
 				if (user0score > user1score) {
-					infoText.append("나 " + user0score + " : " + user1score + " 상대         I'm a winner!");
+					infoText.append("나 " + user0score + " : " + user1score + " 상대         승리!");
 				} else {
-					infoText.append("나 " + user0score + " : " + user1score + " 상대         I'm a loser...");
+					infoText.append("나 " + user0score + " : " + user1score + " 상대         패배...");
 				}
 			} else {
 				if (user0score < user1score) {
-					infoText.append("나 " + user1score + " : " + user0score + " 상대         I'm a winner!");
+					infoText.append("나 " + user1score + " : " + user0score + " 상대         승리!");
 				} else {
-					infoText.append("나 " + user1score + " : " + user0score + " 상대         I'm a loser...");
+					infoText.append("나 " + user1score + " : " + user0score + " 상대         패배...");
 				}
 			}
 
@@ -221,7 +221,7 @@ public class GuiGame1 extends Game1 implements GamePanel {
 
 			// 자신의 턴이 아님 -> 클릭 불가
 			if (!myTurn) {
-				infoText.setText("It's opponent's turn...\nPlease wait for a while");
+				infoText.setText("상대방의 차례입니다. 잠시만 기다려 주세요.");
 				return;
 			}
 

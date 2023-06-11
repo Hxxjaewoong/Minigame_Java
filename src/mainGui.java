@@ -12,7 +12,7 @@ import gui.GuiGame4;
 //import gui.GuiGame5;
 
 
-class mainGui extends JFrame {
+class MainGui extends JFrame {
 	
 	
 
@@ -52,7 +52,7 @@ class mainGui extends JFrame {
     
     
 
-    mainGui(Client client) {
+    MainGui(Client client) {
         this.client = client;
 
         getContentPane().setBackground(new Color(238, 238, 238));

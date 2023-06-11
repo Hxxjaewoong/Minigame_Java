@@ -49,6 +49,6 @@ public class Gamerunner {
 
 		// login창 숨기고 게임 창 띄우기
 		logInFrame.dispose();
-		mainGui maingui = new mainGui(client);
+		MainGui maingui = new MainGui(client);
 	}
 }

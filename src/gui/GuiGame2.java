@@ -82,7 +82,7 @@ public class GuiGame2 extends Game2 implements GamePanel {
 	// 3초 기다린 후에 시작
 	void wait3Sec() {
 		try {
-			infoText.setText("The game is about to start");
+			infoText.setText("게임이 곧 시작됩니다.");
 			Thread.sleep(1000);
 			infoText.setText("3");
 			Thread.sleep(1000);
@@ -106,7 +106,7 @@ public class GuiGame2 extends Game2 implements GamePanel {
 
 			wait3Sec();
 			playing = true;
-			infoText.setText("Game start! Target: 1");
+			infoText.setText("게임 시작! 목표: 1");
 		}
 
 
@@ -120,9 +120,9 @@ public class GuiGame2 extends Game2 implements GamePanel {
 			if (user == client.userNumber) {
 				buttons[r][c].setText("");
 				buttons[r][c].setBackground(Color.black);
-				infoText.setText("win!");
+				infoText.setText("승리!");
 			} else {
-				infoText.setText("lose...");
+				infoText.setText("패배...");
 			}
 
 			playing = false;
@@ -144,7 +144,7 @@ public class GuiGame2 extends Game2 implements GamePanel {
 				buttons[r][c].setText(String.valueOf(nextLayer));
 			}
 
-			infoText.setText("Target: " + String.valueOf(nextTarget));
+			infoText.setText("목표: " + String.valueOf(nextTarget));
 
 			return;
 		}
