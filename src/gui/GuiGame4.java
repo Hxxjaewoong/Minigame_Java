@@ -119,12 +119,13 @@ public class GuiGame4 extends Game4 implements GamePanel{
         	
 		@Override
 		public void run() {
-			if (!playing) return;
-
+			
 			int randomInt;
 			keyPressed = "";
-
+			
 			for(int i = 1; i <= 30; ++i) {
+				if (!playing) return;
+
 				randomInt = random.nextInt(12);
 				final ImageIcon mentImage = new ImageIcon("image/dir" + Integer.toString(randomInt+1) + ".png");
 				final Image image = mentImage.getImage().getScaledInstance(460, 230, Image.SCALE_SMOOTH);
@@ -137,6 +138,7 @@ public class GuiGame4 extends Game4 implements GamePanel{
 					e.printStackTrace();
 				}
 				
+				if (!playing) return;
 				if(ANSWER[randomInt] == 0 && keyPressed.equals("right")) {
 					scoring(true);
 					scoreLabel.setText("점수: "+ Integer.toString(score));
