@@ -1,6 +1,7 @@
 package gui;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -8,20 +9,15 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
 import games.Game4;
-import socket.Client;
 
 public class GuiGame4 extends Game4 implements GamePanel {
-
-	Client client;
 	
 	public JPanel panel;
 	public JPanel panelInfo;
     public JPanel panelPlay;
 	public JTextArea infoText;
 
-	public GuiGame4(Client client) {
-		this.client = client;
-
+	public GuiGame4() {
 		panel = new JPanel();
 		panel.setBounds(gameArea);
 

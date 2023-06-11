@@ -1,88 +1,59 @@
 package games;
-
-
-import java.util.Random;
-import java.util.Scanner;
-
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class Game4 {
-//	private static final int GAME_DURATION = 30; // 게임 지속 시간 (초)
-//    private static final int RANGE_MIN = 1;      // 랜덤 수 범위 최솟값
-//    private static final int RANGE_MAX = 100;    // 랜덤 수 범위 최댓값
-//
-//    private int player1Score;                    // 플레이어 1의 점수
-//    private int player2Score;                    // 플레이어 2의 점수
-//
-//    public Game4() {
-//    	player1Score = 0;
-//        //player2Score = 0; 소켓을 이용해 대결시 구현 예정
-//        
-//        Random random = new Random();
-//        
-//        while(true) {
-//        	int num1 = random.nextInt(RANGE_MAX - RANGE_MIN + 1) + RANGE_MIN;
-//            int num2 = random.nextInt(RANGE_MAX - RANGE_MIN + 1) + RANGE_MIN;
-//            int result;
-//            
-//            switch (random.nextInt(3)) {
-//            case 0:
-//                result = num1 + num2;
-//                System.out.print(num1 + " + " + num2 + " = ");
-//                break;
-//            case 1:
-//                result = num1 - num2;
-//                System.out.print(num1 + " - " + num2 + " = ");
-//                break;
-//            case 2:
-//                result = num1 * num2;
-//                System.out.print(num1 + " * " + num2 + " = ");
-//                break;
-//                /*
-//            case 3:
-//                result = num1 / num2;
-//                System.out.print(num1 + " / " + num2 + " = ");
-//                break;
-//                */
-//            default:
-//                result = 0;
-//                break;
-//            }
-//            
-//            boolean isEven = result % 2 == 0;
-//            //int answer = getPlayerAnswer();
-//            /*
-//            if ((isEven && answer == 2) || (!isEven && answer == 1)) {
-//            	player1Score++;
-//            
-//            } */    
-//        }
-//        //scanner.close();
-//        //String winner = getWinner();
-//        
-//        
-//        		
-//        
-//    }
-//    /*
-//    private int getPlayerAnswer() {
-//        int answer;
-//        do {
-//            System.out.println("	1. 홀수\t2. 짝수");
-//            System.out.print("정답을 입력하세요: ");
-//            
-//        } while (answer != 1 && answer != 2);
-//
-//        return answer;
-//    }
-//	*/
-//    private String getWinner() {
-//        if (player1Score > player2Score)
-//            return "플레이어 1";
-//        else if (player2Score > player1Score)
-//            return "플레이어 2";
-//        else
-//            return "무승부";
-//    }
-//    
-//    
+
+	//왼쪽 오른쪽 게임
+	public static final int COUNT = 20;
+	public boolean playing;
+	
+	public int score; //맞으면 +3 틀리면 -4 
+	public String[] ment = {"오른쪽!", "왼쪽!", "오른쪽..이 아니라 왼쪽!", "왼쪽..이 아니라 오른쪽!", 
+			"오른쪽같은 왼쪽", "왼쪽같은 오른쪽", "아래쪽!", "위쪽!", "위쪽..이 아니라 아래쪽", "아래쪽..이 아니라 위쪽",
+			"not up, Left!", "not Down, Right!"};
+	
+	//오른쪽:0 / 왼쪽: 1 / 아래쪽: 2 / 위쪽: 3
+	public int[] answer = {0, 1, 1, 0, 1, 0, 2, 3, 2, 3, 1, 0};
+	//맞았을때 / 틀렸을 때 
+	public int[] InfoScore = {3, -4};
+	
+	
+	public Game4()
+	{
+		score = 0;
+	}
+	
+	//맞았는지 틀렸는지 확인 -> 맞았으면 true/ 틀렸으면 false 반환
+	public boolean checkCorrect(int key, int press)
+	{
+		//key: 문제 / press: 누른 키
+		if(answer[key] != press)
+		{
+			return false;
+		}
+		return true;
+	}
+	
+	//점수 올려주는 함수
+	public void scoring(boolean result)
+	{
+		if(result == true)
+		{	
+			this.score += InfoScore[0];
+		}
+		else
+		{
+			this.score += InfoScore[1];
+		}
+	}
+	
+	//30회가 모두 끝났을 때 게임 종료
+	public boolean isFinished(int countPlay)
+	{
+		return countPlay == COUNT;
+	}
+	
+
+	
 }
