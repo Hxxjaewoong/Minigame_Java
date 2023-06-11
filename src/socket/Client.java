@@ -27,7 +27,6 @@ public class Client implements Runnable {
 
             // 유저 번호 저장
             userNumber = in.readInt();
-            System.out.println("user number: " + userNumber);
 
             Thread receiveThread = new Thread(new ReceiveThread());
             receiveThread.start();
@@ -49,7 +48,6 @@ public class Client implements Runnable {
                     message = in.readUTF(); // 서버로부터 메시지 수신
 
                     if (message != null) {
-                        System.out.println("<<< " + message);
                         receivedMessage = message;
                     }
                 }
@@ -65,7 +63,6 @@ public class Client implements Runnable {
     // 서버로 메시지를 전송하는 메소드
     public void sendMessage(String message) {
         try {
-            System.out.println(">>> " + message);
             out.writeUTF(message);
             out.flush();
         } catch (IOException e) {

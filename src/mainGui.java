@@ -292,7 +292,6 @@ class MainGui extends JFrame {
 
             // 프로그램 종료
             else if (command.equals("Exit")) {
-                System.out.println("Exit");
                 System.exit(0);
             }
             

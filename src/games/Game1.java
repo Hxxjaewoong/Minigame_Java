@@ -104,7 +104,6 @@ public class Game1 {
 
 
 	public boolean isFinished() {
-		System.out.println(foundCount);
 		return foundCount == TARGET_COUNT;
 	}
 }

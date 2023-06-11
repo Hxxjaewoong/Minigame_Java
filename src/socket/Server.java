@@ -41,7 +41,6 @@ public class Server implements Runnable {
     // 클라이언트로 메시지를 전송하는 메소드
     private void sendMessage(String message) {
         try {
-            System.out.println("SER >>> " + message);
             out[0].writeUTF(message);
             out[0].flush();
             out[1].writeUTF(message);
@@ -66,7 +65,6 @@ public class Server implements Runnable {
                     String message = in[userNumber].readUTF(); // 클라이언트로부터 메시지 수신
                     
                     if (message != null) {
-                        System.out.println("SER <<< " + message);
 
                         String response = gameManager.handleReceivedMessage(message);
 

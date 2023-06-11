@@ -1,6 +1,6 @@
 package gui;
-import java.awt.Color;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Image;
@@ -9,8 +9,6 @@ import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.Random;
 
 import socket.Client;
@@ -126,7 +124,7 @@ public class GuiGame4 extends Game4 implements GamePanel{
 			int randomInt;
 			keyPressed = "";
 
-			for(int i = 1; i <= 20; ++i) {
+			for(int i = 1; i <= 30; ++i) {
 				randomInt = random.nextInt(12);
 				final ImageIcon mentImage = new ImageIcon("image/dir" + Integer.toString(randomInt+1) + ".jpg");
 				final Image image = mentImage.getImage().getScaledInstance(460, 230, Image.SCALE_SMOOTH);
@@ -134,7 +132,7 @@ public class GuiGame4 extends Game4 implements GamePanel{
 				mentLabel.setIcon(new ImageIcon(image));
 
 				try {
-					Thread.sleep(2000);
+					Thread.sleep(1000);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
@@ -219,6 +217,7 @@ public class GuiGame4 extends Game4 implements GamePanel{
 		// 게임 시작
 		if (parsedMessage[0].equals("start")) {
 			playing = false;
+			count = 3;
 			Thread wait3Sec = new Wait3Sec();
 			wait3Sec.start();
 			try {
