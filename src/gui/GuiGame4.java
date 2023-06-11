@@ -7,7 +7,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.*;
-import javax.swing.plaf.DesktopIconUI;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -39,18 +38,11 @@ public class GuiGame4 extends Game4 implements GamePanel{
 	JButton rightButton;
 
 
-	public boolean isUpKeyPressed;
-    public boolean isDownKeyPressed;
-    public boolean isLeftKeyPressed;
-    public boolean isRightKeyPressed;
+	public String keyPressed;
     
 	public GuiGame4(Client clinet) {
 		this.client = clinet;
 
-		isUpKeyPressed = false;
-		isDownKeyPressed = false;
-		isLeftKeyPressed = false;
-		isRightKeyPressed = false;
 		panel = new JPanel();
 		panel.setBounds(gameArea);
 		panel.setFocusable(true); // 패널에 포커스를 설정
@@ -62,7 +54,7 @@ public class GuiGame4 extends Game4 implements GamePanel{
 		scoreLabel = new JLabel("Score: 0");
         scoreLabel.setHorizontalAlignment(JLabel.CENTER); // 가운데 정렬
         
-		infoText = new JTextArea("Contains info of game2");
+		infoText = new JTextArea("Contains info of game4");
 		panelInfo.add(infoText);
 
         panelPlay = new JPanel();
@@ -125,15 +117,17 @@ public class GuiGame4 extends Game4 implements GamePanel{
     }
 	
 
-	SwingWorker<Void , String> worker = new SwingWorker<Void, String>(){
+	private class QueryChange extends Thread  {
 		Random random = new Random();
         	
 		@Override
-		protected Void doInBackground() {
+		public void run() {
+			int randomInt;
+			keyPressed = "";
+
 			for(int i = 1; i <= 20; ++i) {
-				int randomInt = random.nextInt(12);
-				
-				publish(MENT[randomInt]);
+				randomInt = random.nextInt(12);
+				TextQ.setText(MENT[randomInt]);
 
 				try {
 					Thread.sleep(2000);
@@ -141,19 +135,19 @@ public class GuiGame4 extends Game4 implements GamePanel{
 					e.printStackTrace();
 				}
 				
-				if(ANSWER[randomInt] == 0 && isRightKeyPressed == true) {
+				if(ANSWER[randomInt] == 0 && keyPressed.equals("right")) {
 					scoring(true);
 					scoreLabel.setText("Score: "+ Integer.toString(score));
 				}
-				else if(ANSWER[randomInt] == 1 && isLeftKeyPressed == true) {
+				else if(ANSWER[randomInt] == 1 && keyPressed.equals("left")) {
 					scoring(true);
 					scoreLabel.setText("Score: "+ Integer.toString(score));
 				}
-				else if(ANSWER[randomInt] == 2 && isDownKeyPressed == true) {
+				else if(ANSWER[randomInt] == 2 && keyPressed.equals("down")) {
 					scoring(true);
 					scoreLabel.setText("Score: "+ Integer.toString(score));
 				}
-				else if(ANSWER[randomInt] == 3 && isUpKeyPressed == true) {
+				else if(ANSWER[randomInt] == 3 && keyPressed.equals("up")) {
 					scoring(true);
 					scoreLabel.setText("Score: "+ Integer.toString(score));
 				}
@@ -161,30 +155,12 @@ public class GuiGame4 extends Game4 implements GamePanel{
 					scoring(false);
 					scoreLabel.setText("Score: "+ Integer.toString(score));
 				}
-				isRightKeyPressed = false;
-				isLeftKeyPressed = false;
-				isDownKeyPressed = false;
-				isUpKeyPressed = false;
+				keyPressed = "";
 			}
-			
-			return null;
-		}
 
-		// update query
-		@Override
-		protected void process(java.util.List<String> chunks) {
-			for(String chunk: chunks) {
-				TextQ.setText(chunk);
-			}
-		}
-
-		// game over
-		@Override
-		protected void done() {
 			client.sendMessage("finish " + client.userNumber + " " + score);
 		}
-		
-	};
+	}
 
 	Timer readyTimer = new Timer();
 	TimerTask readyTimer1 = new TimerTask() {
@@ -197,7 +173,10 @@ public class GuiGame4 extends Game4 implements GamePanel{
 			else {
 				TextQ.setText("                  Go!"); // 카운트다운 종료 후 메시지 표시
 				readyTimer.cancel();
-				worker.execute();
+
+				// 게임 시작
+				Thread queryChangeThread = new QueryChange();
+				queryChangeThread.start();
 			}
 		}
 	};
@@ -213,30 +192,7 @@ public class GuiGame4 extends Game4 implements GamePanel{
 				return;
 			}
 
-			int direction;
-			switch (e.getActionCommand()) {
-				case "up":
-					direction = 0;
-				case "down":
-					direction = 1;
-				case "left":
-					direction = 2;
-				case "right":
-					direction = 3;
-				default:
-					direction = -1; // error
-			}
-
-			JButton[] buttons = {upButton, downButton, leftButton, rightButton};
-
-			try {
-				isDownKeyPressed = true;
-				buttons[direction].setBackground(Color.RED);
-				Thread.sleep(500);
-				buttons[direction].setBackground(Color.WHITE);
-			} catch (InterruptedException err) {
-				err.printStackTrace();
-			}
+			keyPressed = e.getActionCommand();
 		}
     }
 
@@ -249,7 +205,6 @@ public class GuiGame4 extends Game4 implements GamePanel{
 		// 서버에게서 정보 받을 수 있을 듯
 		if (parsedMessage[0].equals("start")) {
 			playing = true;
-			System.out.println("this is test");
 			readyTimer.schedule(readyTimer1, 3000, 1000);
 		}
 
