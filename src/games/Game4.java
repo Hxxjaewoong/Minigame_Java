@@ -1,9 +1,6 @@
 package games;
 
 public class Game4 {
-
-	//왼쪽 오른쪽 게임
-	public static final int COUNT = 20;
 	
 	public int score; //맞으면 +3 틀리면 -4 
 	public String[] MENT = {"오른쪽!", "왼쪽!", "오른쪽..이 아니라 왼쪽!", "왼쪽..이 아니라 오른쪽!", 
@@ -34,10 +31,5 @@ public class Game4 {
 		else {
 			this.score += INFO_SCORE[1];
 		}
-	}
-	
-	//30회가 모두 끝났을 때 게임 종료
-	public boolean isFinished(int countPlay) {
-		return countPlay == COUNT;
 	}
 }

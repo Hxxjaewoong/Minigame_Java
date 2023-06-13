@@ -119,7 +119,7 @@ public class GuiGame2 extends Game2 implements GamePanel {
 		if (parsedMessage[0].equals("finish")) {
 			if (user == client.userNumber) {
 				buttons[r][c].setText("");
-				buttons[r][c].setBackground(new Color(196, 254, 213));
+				buttons[r][c].setBackground(Color.black);
 				infoText.setText("승리!");
 			} else {
 				infoText.setText("패배...");

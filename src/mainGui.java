@@ -9,7 +9,6 @@ import gui.GuiGame1;
 import gui.GuiGame2;
 import gui.GuiGame3;
 import gui.GuiGame4;
-//import gui.GuiGame5;
 
 
 class MainGui extends JFrame {
@@ -224,9 +223,9 @@ class MainGui extends JFrame {
             case 4:
             	instructions = "<html>Direction Game<br><br>"
                         + "\"Direction Game\"에 오신 것을 환영합니다. 이 게임은 텍스트를 읽고 정확한 방향을 클릭하는 게임입니다.<br><br>"
-                        + "게임은 40초 동안 진행되며, 여러분은 화면에 나타나는 텍스트를 읽고 해당하는 방향을 빠르게 클릭해야 합니다. 주어진 시간 동안 정확한 클릭을 최대한 많이 한 사람이 승리합니다.<br><br>"
+                        + "게임은 30초 동안 진행되며, 여러분은 화면에 나타나는 텍스트를 읽고 해당하는 방향을 빠르게 클릭해야 합니다. 주어진 시간 동안 정확한 클릭을 최대한 많이 한 사람이 승리합니다.<br><br>"
                         + "여러분은 빠른 판단력과 순발력을 갖추어야 합니다. 텍스트를 빠르게 읽고 정확히 이해한 후, 올바른 방향을 선택해야 합니다. 정확성은 물론 속도도 중요하니 여러분의 집중력과 반응속도를 최대한 발휘하세요.<br><br>"
-                        + "지금부터 여러분의 능력을 시험해보세요. 40초 동안 정확한 클릭을 최대한 많이 해보고, 승리의 영광을 거두세요!</html>";
+                        + "지금부터 여러분의 능력을 시험해보세요. 30초 동안 정확한 클릭을 최대한 많이 해보고, 승리의 영광을 거두세요!</html>";
                 gameImage = game4InstructionImage;
                 break;
             default:

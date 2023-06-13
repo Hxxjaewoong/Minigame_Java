@@ -1,11 +1,4 @@
 package games;
-/*
- * 
- * 할리갈리
- * 
- * 
- */
-
 
 import java.util.Random;
 
